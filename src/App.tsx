@@ -14,6 +14,12 @@ import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/Tables/BasicTables";
 import FormElements from "./pages/Forms/FormElements";
+import RegisterLugar from "./pages/Forms/RegisterLugar";
+import RegisterSensor from "./pages/Forms/RegisterSensor";
+import RegisterNodo from "./pages/Forms/RegisterNodoIoT";
+import RegisterMedida from "./pages/Forms/RegisterMedida";
+import RegisterTrabajador from "./pages/Forms/RegisterTrabajador";
+import RegisterEdad from "./pages/Forms/RegisterEdad";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
@@ -36,6 +42,12 @@ export default function App() {
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
+            <Route path="/register-lugar" element={<RegisterLugar />} />
+            <Route path="/register-edad" element={<RegisterEdad />} />
+            <Route path="/register-sensor" element={<RegisterSensor />} />
+            <Route path="/register-nodo" element={<RegisterNodo />} />
+            <Route path="/register-medida" element={<RegisterMedida />} />
+            <Route path="/register-trabajador" element={<RegisterTrabajador />} />
 
             {/* Tables */}
             <Route path="/basic-tables" element={<BasicTables />} />

@@ -16,9 +16,15 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 8089,
+    port: 8090,
+    open: true,
+    cors: true,
     proxy: {
-      "/api/v1": { target: 'http://127.0.0.1:5173', changeOrigin: true }
+      '/api/v1': {
+        	target: 'http://localhost:5173',
+        	changeOrigin: true,
+        	// changeOrigin: Ensures the Host header is changed to match the target server
+		}
     }
   }
 });

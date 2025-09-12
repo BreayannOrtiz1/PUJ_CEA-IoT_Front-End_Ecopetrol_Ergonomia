@@ -47,13 +47,10 @@ export default function InputGateway({ onOperationComplete }: InputGatewayProps)
     try {
       console.log("Enviando datos al backend:", formData);
       const result = await registrar_gateway(formData);
+      console.log("Respuesta del backend:", result);
       
       // Notificar al componente padre del resultado
-      onOperationComplete?.(resultado || {
-        ok: true,
-        message: "Gateway registrado exitosamente",
-        data: result
-      });
+      onOperationComplete?.(result);
 
       // Limpiar formulario tras éxito
       setFormData({

@@ -24,6 +24,8 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import CRUDTable from "./pages/Tables/CRUDTable";
+import GatewayInterface from "./pages/Forms/GatewayInterface";
 
 export default function App() {
   return (
@@ -42,6 +44,7 @@ export default function App() {
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
+            <Route path="/gateway" element={<GatewayInterface />} />
             <Route path="/register-lugar" element={<RegisterLugar />} />
             <Route path="/register-edad" element={<RegisterEdad />} />
             <Route path="/register-sensor" element={<RegisterSensor />} />
@@ -50,7 +53,7 @@ export default function App() {
             <Route path="/register-trabajador" element={<RegisterTrabajador />} />
 
             {/* Tables */}
-            <Route path="/basic-tables" element={<BasicTables />} />
+            <Route path="/basic-tables" element={<CRUDTable />} />
 
             {/* Ui Elements */}
             <Route path="/alerts" element={<Alerts />} />

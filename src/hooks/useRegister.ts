@@ -1,4 +1,4 @@
-// src/hooks/
+// src/hooks/useRegister.ts
 import { useState } from "react";
 import { registrarGateway, registrarLugar, Gateway, Lugar } from "../services/registerService";
 

@@ -44,7 +44,8 @@ const navItems: NavItem[] = [
   {
     name: "Registro",
     icon: <ListIcon />,
-    subItems: [{ name: "Gateway", path: "/form-elements", pro: false }, 
+    subItems: [{ name: "Elements", path: "/form-elements", pro: false }, 
+      { name: "Gateway", path: "/gateway", pro: false },
       { name: "Lugar", path: "/register-lugar", pro: false }, 
       { name: "Medida", path: "/register-medida", pro: false }, 
       { name: "Nodo IoT", path: "/register-nodo", pro: false }, 

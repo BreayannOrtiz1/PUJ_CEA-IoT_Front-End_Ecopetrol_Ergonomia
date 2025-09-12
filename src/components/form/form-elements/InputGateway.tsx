@@ -74,6 +74,7 @@ export default function InputGateway({ onOperationComplete }: InputGatewayProps)
 
   return (
     <ComponentCard title="Registrar Gateway">
+      <Label className="mb-1">Complete los campos del formulario</Label>
       <div className="space-y-1">
 
         {/* Marca */}

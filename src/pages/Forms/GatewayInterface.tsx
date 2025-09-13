@@ -1,46 +1,59 @@
 import { useState } from "react";
 import PageMeta from "../../components/common/PageMeta";
 import { DynamicTable } from "../../components/tables/BasicTables/DynamicTable";
-import { ModalCreateInTable } from "../../components/common/ModalCreateInTable";
 import { useModal } from "../../hooks/useModal";
 import { useGateway } from "../../hooks/useRegister";
-import Alert from "../../components/ui/alert/Alert";
+import { CreateGatewayModal } from "../../components/modals/CreateGatewayModal";
+import { UpdateGatewayModal } from "../../components/modals/UpdateGatewayModal";
+import { DeleteGatewayModal } from "../../components/modals/DeleteGatewayModal";
 
 
 export default function GatewayInterface() {
     // Estado para refrescar la tabla
     const [refreshKey, setRefreshKey] = useState(0);
+
+    // Estados independientes para cada modal
+    const { isOpen: isCreateOpen, openModal: openCreateModal, closeModal: closeCreateModal } = useModal();
+    const { isOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useModal();
+    const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
     
-    // Estado y funciones para el modal
-    const { isOpen, openModal, closeModal } = useModal();
-    
+
     // Hook para operaciones de gateway
-    const { registrar_gateway } = useGateway();
+    const { 
+        registrar_gateway, 
+        actualizar_gateway, 
+        eliminar_gateway 
+    } = useGateway();
 
     // Función para refrescar la tabla
     const handleRefresh = () => {
         setRefreshKey(prev => prev + 1);
     };
-
-    // Campos del formulario para Gateway
-    const gatewayFields = [
-        { name: "marca", label: "Marca", required: true },
-        { name: "referencia", label: "Referencia", required: true },
-        { name: "serial", label: "Serial", required: true },
-        { name: "os", label: "Sistema Operativo", required: true },
-        { name: "ssid", label: "SSID", required: true },
-        { name: "macWifi", label: "MAC WiFi", required: true },
-        { name: "macEthernet", label: "MAC Ethernet", required: true }
-    ];
-
-    // Función para manejar el guardado de datos
-    const handleSave = async (formData: any) => {
+    /**
+     * Interfaz para los datos de Gateway
+     */
+    interface Gateway {
+        ID_Gateway?: number;
+        marca?: string;
+        referencia: string;
+        serial?: string;
+        os?: string;
+        ssid?: string;
+        macWifi?: string;
+        macEthernet?: string;
+    }
+    /**
+     * Maneja la creación de un nuevo gateway.
+     * Esta función se pasa como callback al modal de creación.
+     * Implementa el patrón Lifting State Up manteniendo la lógica de negocio en el componente padre.
+     * 
+     * @param formData - Datos del formulario para crear el gateway
+     * @returns Objeto con el resultado de la operación
+     */
+    const handleCreate = async (formData: any) => {
         try {
             const result = await registrar_gateway(formData);
-            
-            // Refrescar la tabla después de un registro exitoso
-            handleRefresh();
-            
+            handleRefresh(); // Actualizar la tabla después del éxito
             return {
                 ok: true,
                 message: "Gateway registrado exitosamente",
@@ -53,34 +66,126 @@ export default function GatewayInterface() {
                 data: null
             };
         }
-    };    return (
+    };
+
+    /**
+     * Maneja la actualización de un gateway existente.
+     * Callback para el modal de actualización.
+     * 
+     * @param formData - Datos actualizados del gateway
+     * @returns Objeto con el resultado de la operación
+     */
+    const handleUpdate = async (formData: any) => {
+        try {
+            const result = await actualizar_gateway(formData);
+            handleRefresh(); // Actualizar la tabla después del éxito
+            return {
+                ok: true,
+                message: "Gateway actualizado exitosamente",
+                data: result
+            };
+        } catch (error: any) {
+            return {
+                ok: false,
+                message: error.message || "Error al actualizar el gateway",
+                data: null
+            };
+        }
+    };
+
+    /**
+     * Maneja la eliminación de un gateway.
+     * Callback para el modal de eliminación.
+     * 
+     * @param formData - Datos del gateway a eliminar (ID requerido)
+     */
+    const handleDelete = async (formData: any) => {
+        try {
+            // Validar que el ID existe
+            if (!formData.ID_Gateway) {
+                return {
+                    ok: false,
+                    message: "Se requiere el ID del gateway para eliminar"
+                };
+            }
+
+            await eliminar_gateway(formData);
+            handleRefresh();
+            return {
+                ok: true,
+                message: "Gateway eliminado exitosamente"
+            };
+        } catch (error: any) {
+            return {
+                ok: false,
+                message: error.message || "Error al eliminar el gateway"
+            };
+        }
+    };
+
+    // Estado para el gateway seleccionado con tipo correcto
+    const [selectedGateway, setSelectedGateway] = useState<Gateway | null>(null);
+
+    return (
         <div>
             <PageMeta
                 title="Base de datos GATEWAYS"
                 description="En esta pagina podra agregar gateways, editar o elimarlos"
             />
             <div className="grid">
-                <button
-                    onClick={openModal}
-                    className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
-                >
-                    <svg
-                        className="fill-current"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
-                            fill=""
-                        />
-                    </svg>
-                    Crear un nuevo Gateway
-                </button>
+                <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+                    <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
+                        <button
+                            onClick={openCreateModal}
+                            className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+                        >
+                            <svg
+                                className="fill-current"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                                    fill=""
+                                />
+                            </svg>
+                            Crear un nuevo Gateway
+                        </button>
+                        <button
+                            onClick={openUpdateModal}
+                            className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+                        >
+                            <svg
+                                className="fill-current"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                                    fill=""
+                                />
+                            </svg>
+                            Editar un Gateway
+                        </button>
+                        <button
+                            onClick={openDeleteModal}
+                            className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-solid border-blue-500 bg-white px-4 py-3 text-sm font-medium text-red-700 shadow-theme-xs hover:bg-red-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+                        >
+                            Eliminar un Gateway
+                        </button>
+
+                    </div>
+                </div>
                 <div className="flex justify-between items-center mb-5">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
                         GATEWAY REGISTRADOS
@@ -105,21 +210,37 @@ export default function GatewayInterface() {
                         Actualizar
                     </button>
                 </div>
-                {/* Modal para crear gateway */}
-                <ModalCreateInTable
-                    isOpen={isOpen}
-                    closeModal={closeModal}
-                    onSave={handleSave}
-                    title="Crear nuevo Gateway"
-                    description="Ingrese los datos del nuevo gateway que desea registrar"
-                    fields={gatewayFields}
-                    entityName="Gateway"
+                {/* Modal para crear gateway - Implementación de Lifting State Up */}
+                <CreateGatewayModal
+                    isOpen={isCreateOpen}
+                    onClose={closeCreateModal}
+                    onSave={handleCreate}  // Función para manejar la creación del gateway
+                />
+
+                {/* Modal para actualizar gateway - Implementación de Lifting State Up */}
+                <UpdateGatewayModal
+                    isOpen={isUpdateOpen}
+                    onClose={closeUpdateModal}
+                    onSave={handleUpdate}  // Función para manejar la actualización del gateway
+                    initialData={selectedGateway}  // Datos iniciales del gateway seleccionado
+                />
+
+                {/* Modal para eliminar gateway - Implementación de Lifting State Up */}
+                <DeleteGatewayModal
+                    isOpen={isDeleteOpen}
+                    onClose={closeDeleteModal}
+                    onConfirm={handleDelete}  // Función para manejar la eliminación del gateway
+                    gatewayData={selectedGateway ? {
+                        ID_Gateway: selectedGateway.ID_Gateway,
+                        marca: selectedGateway.marca,
+                        referencia: selectedGateway.referencia
+                    } : undefined}
                 />
 
                 {/* Tabla de gateways */}
                 <div className="space-y-1">
-                    <DynamicTable 
-                        tableName="gateway" 
+                    <DynamicTable
+                        tableName="gateway"
                         key={refreshKey}
                         orderBy="ID_Gateway"
                         orderDirection="asc"

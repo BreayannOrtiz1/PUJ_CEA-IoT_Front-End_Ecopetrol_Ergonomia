@@ -1,6 +1,6 @@
 // src/hooks/useRegister.ts
 import { useState } from "react";
-import { registrarGateway, registrarLugar, Gateway, Lugar } from "../services/registerService";
+import { registrarGateway, actualizarGateway, eliminarGateway, Gateway } from "../services/registerService";
 
 export function useGateway() {
   const [loading, setLoading] = useState(false);
@@ -22,11 +22,11 @@ export function useGateway() {
     }
   };
 
-  const registrar_lugar = async (lugar: Lugar) => {
+  const actualizar_gateway = async (gateway: Gateway) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await registrarLugar(lugar);
+      const res = await actualizarGateway(gateway);
       setResultado(res);
       return res;
     } catch (err: any) {
@@ -36,5 +36,20 @@ export function useGateway() {
       setLoading(false);
     }
   };
-  return { registrar_gateway, registrar_lugar, loading, error, resultado };
+
+  const eliminar_gateway = async (gateway: Gateway) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await eliminarGateway(gateway);
+      setResultado(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { registrar_gateway, actualizar_gateway, eliminar_gateway, loading, error, resultado };
 }

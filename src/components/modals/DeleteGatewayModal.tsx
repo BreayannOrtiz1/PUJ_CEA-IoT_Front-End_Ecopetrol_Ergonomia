@@ -43,12 +43,19 @@ export const DeleteGatewayModal = ({
     const [isLoading, setIsLoading] = useState(false);
     // Estado para manejar errores
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     /**
      * Valida que el ID sea proporcionado y sea válido
      */
     const validateId = (id: string): boolean => {
-        return id.trim() !== '' && !isNaN(Number(id));
+        if(id.trim() !== '' && !isNaN(Number(id))){
+            setSuccess(null);
+            setError(null);
+            return true;
+        } else {
+            return false;
+        }    
     };
 
     /**
@@ -63,6 +70,7 @@ export const DeleteGatewayModal = ({
 
         setIsLoading(true);
         setError(null);
+        setSuccess(null);
 
         try {
             // Preparar datos para enviar al servidor
@@ -70,14 +78,16 @@ export const DeleteGatewayModal = ({
                 ID_Gateway: Number(gatewayId),
                 referencia: gatewayData?.referencia || ''  // Incluir referencia si está disponible
             };
-            console.log(deleteData);
+            
             const result = await onConfirm(deleteData);
 
             if (result.ok) {
                 // Si todo sale bien, cerrar el modal después de un breve delay
+                setSuccess(result.message || `Gateway eliminado exitosamente`);
                 setTimeout(() => {
                     onClose();
-                }, 500);
+                    setSuccess(null);
+                }, 1500);
             } else {
                 setError(result.message);
             }
@@ -124,6 +134,11 @@ export const DeleteGatewayModal = ({
                             {error}
                         </div>
                     )}
+                    {success && (
+                            <div className="mt-4 p-3 rounded bg-green-100 text-green-700">
+                                {success}
+                            </div>
+                        )}
                     
                     <p className="mt-4 text-sm text-red-500">
                         Esta acción no se puede deshacer.

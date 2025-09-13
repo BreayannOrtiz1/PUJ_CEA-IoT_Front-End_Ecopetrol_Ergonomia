@@ -14,6 +14,7 @@ export interface ApiResponse<T> {
  * @returns Promise con la respuesta del backend
  */
 export async function listAll(tableName: string): Promise<ApiResponse<any>> {
+    console.log("Inside listAll, tableName:", tableName);
     try {   //http://4.150.10.133:8090/api/v1/gateways
         //const tableNameJson = {tableName : tableName};
         //console.log(`Datos enviados a: ${API_BASE_URL}/${tableName}`);
@@ -25,7 +26,7 @@ export async function listAll(tableName: string): Promise<ApiResponse<any>> {
             },
             //body: JSON.stringify(tableNameJson),
         });
-        console.log(response);
+        //console.log(response);
         if (!response.ok) {
             throw new Error(`Error al obtener datos de ${tableName}: ${response.statusText}`);
         }

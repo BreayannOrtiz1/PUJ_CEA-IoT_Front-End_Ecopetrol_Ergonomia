@@ -108,7 +108,7 @@ export default function GatewayInterface() {
                     message: "Se requiere el ID del gateway para eliminar"
                 };
             }
-
+            console.log("Inside handleDelete, ID_Gateway:", formData.ID_Gateway);
             await eliminar_gateway(formData);
             handleRefresh();
             return {

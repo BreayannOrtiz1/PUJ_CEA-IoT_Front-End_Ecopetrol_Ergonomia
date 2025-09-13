@@ -53,6 +53,7 @@ export const UpdateGatewayModal = ({
     const validateFormData = (data: any): boolean => {
         // Verificar que existe el ID
         if (!data.ID_Gateway) return false;
+        if (!data.referencia) return false;
 
         // Verificar que al menos un campo adicional tenga valor
         const hasAtLeastOneField = updateGatewayFields
@@ -71,7 +72,7 @@ export const UpdateGatewayModal = ({
             if (!validateFormData(formData)) {
                 return {
                     ok: false,
-                    message: "Se requiere el ID del Gateway y al menos un campo para actualizar",
+                    message: "Se requiere el ID del Gateway que desea modificar y la referencia,  y al menos un campo para actualizar",
                     data: null
                 };
             }
@@ -102,7 +103,7 @@ export const UpdateGatewayModal = ({
             closeModal={onClose}
             onSave={handleSave}
             title="Actualizar Gateway"
-            description="Modifique los datos del gateway seleccionado"
+            description="Se requiere el ID del Gateway que desea modificar y al menos un campo para actualizar"
             fields={updateGatewayFields}
             entityName="Gateway"
         />

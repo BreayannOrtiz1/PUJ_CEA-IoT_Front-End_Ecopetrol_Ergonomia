@@ -55,17 +55,18 @@ export async function registrarGateway(gateway: Gateway) {
 export async function actualizarGateway(gateway: Gateway) {
   try {
     // Validación de campos requeridos
+    if( !gateway.ID_Gateway) {
+      throw new Error("El campo ID es requerido");
+    }
     if (!gateway.referencia) {
       throw new Error("El campo referencia es requerido");
     }
-    if (!gateway.serial) {
-      throw new Error("El campo serial es requerido");
-    }
-
+    
     // Crear el objeto de datos, omitiendo campos undefined o null
     const gatewayData = {
+      ID: gateway.ID_Gateway,
       referencia: gateway.referencia,
-      serial: gateway.serial,
+      ...(gateway.serial && { serial: gateway.serial }),
       ...(gateway.marca && { marca: gateway.marca }),
       ...(gateway.os && { os: gateway.os }),
       ...(gateway.ssid && { ssid: gateway.ssid }),
@@ -74,7 +75,7 @@ export async function actualizarGateway(gateway: Gateway) {
     };
     console.log(gatewayData);
     const res = await fetch("http://4.150.10.133:8090/api/v1/gateway/update", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
@@ -86,7 +87,7 @@ export async function actualizarGateway(gateway: Gateway) {
       throw new Error(`Error en el servidor: ${res.statusText}`);
     }
 
-    return await res.json(); // aquí recibes el resultado del backend
+    return await res.json();
   } catch (error) {
     console.error("Error en registrarGateway:", error);
     throw error;
@@ -106,9 +107,10 @@ export async function eliminarGateway(gateway: Gateway) {
       ID: gateway.ID_Gateway,
       referencia: gateway.referencia,
     };
-    console.log(gatewayData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/gateway/update", {
-      method: "POST",
+    //console.log("Datos enviados para eliminar:");
+    //console.log(gatewayData);
+    const res = await fetch(`http://4.150.10.133:8090/api/v1/gateway/remove`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"

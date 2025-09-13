@@ -48,6 +48,7 @@ export function ModalCreateInTable({
 
     // Inicializar formData con campos vacíos
     useEffect(() => {
+        setError(null);
         const initialData: Record<string, string> = {};
         fields.forEach(field => {
             initialData[field.name] = '';
@@ -64,6 +65,7 @@ export function ModalCreateInTable({
         // Limpiar mensajes de error/éxito al editar
         setError(null);
         setSuccess(null);
+        setLoading(false);
     };
 
     // Validar campos requeridos
@@ -156,7 +158,7 @@ export function ModalCreateInTable({
                     </div>
                     
                     <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-                        <Button size="sm" variant="outline" onClick={closeModal}>
+                        <Button size="sm" variant="outline" onClick={closeModal} >
                             Cancelar
                         </Button>
                         <Button 

@@ -2,17 +2,15 @@
 import { ModalCreateInTable } from "../common/ModalCreateInTable";
 
 /**
- * Definición de los campos del formulario para Gateway
+ * Definición de los campos del formulario para Lugar
  * Todos los campos son requeridos para la creación
  */
-const gatewayFields = [
-    { name: "marca", label: "Marca", required: true },
-    { name: "referencia", label: "Referencia", required: true },
-    { name: "serial", label: "Serial", required: true },
-    { name: "os", label: "Sistema Operativo", required: true },
-    { name: "ssid", label: "SSID", required: true },
-    { name: "macWifi", label: "MAC WiFi", required: true },
-    { name: "macEthernet", label: "MAC Ethernet", required: true }
+const lugarFields = [
+    { name: "municipio", label: "Municipio", required: true },
+    { name: "sede", label: "Sede", required: true },
+    { name: "edificio", label: "Edificio", required: true },
+    { name: "piso", label: "Piso", required: true },
+    { name: "area", label: "Area", required: true }
 ];
 
 /**
@@ -25,23 +23,23 @@ interface OperationResult {
 }
 
 /**
- * Props del componente CreateGatewayModal
+ * Props del componente CreateLugarwayModal
  */
-interface CreateGatewayModalProps {
+interface CreateLugarModalProps {
     isOpen: boolean;                                      // Controla la visibilidad del modal
     onClose: () => void;                                 // Función para cerrar el modal
     onSave: (formData: any) => Promise<OperationResult>; // Callback para guardar en la base de datos
 }
 
 /**
- * Componente modal específico para la creación de Gateways.
- * Encapsula toda la lógica relacionada con la creación de un gateway.
+ * Componente modal específico para la creación de Lugares.
+ * Encapsula toda la lógica relacionada con la creación de un lugar.
  */
-export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayModalProps) => {
+export const CreateLugarModal = ({ isOpen, onClose, onSave }: CreateLugarModalProps) => {
     // Función para validar los datos antes de guardar
     const validateFormData = (formData: any): boolean => {
         // Verificar que todos los campos requeridos tengan valor
-        return gatewayFields.every(field => 
+        return lugarFields.every(field => 
             field.required ? formData[field.name]?.trim() !== '' : true
         );
     };
@@ -53,7 +51,7 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
             if (!validateFormData(formData)) {
                 return {
                     ok: false,
-                    message: "Todos los campos son requeridos para crear un gateway",
+                    message: "Todos los campos son requeridos para crear un lugar",
                     data: null
                 };
             }
@@ -72,7 +70,7 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al registrar el gateway",
+                message: error.message || "Error al registrar el lugar",
                 data: null
             };
         }
@@ -83,10 +81,10 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Crear nuevo Gateway"
-            description="Ingrese los datos del nuevo gateway que desea registrar"
-            fields={gatewayFields}
-            entityName="Gateway"
+            title="Crear nuevo Lugar"
+            description="Ingrese los datos del nuevo lugar que desea registrar"
+            fields={lugarFields}
+            entityName="Lugar"
         />
     );
 };

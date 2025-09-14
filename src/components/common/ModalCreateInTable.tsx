@@ -10,8 +10,9 @@ interface FormField {
     name: string;           // Nombre del campo en el formData
     label: string;         // Etiqueta que se mostrará al usuario
     required?: boolean;    // Si el campo es obligatorio
-    type?: string;        // Tipo de campo (por defecto texto)
+    type?: string;        // Tipo de campo (text, date, number, etc.)
     rows?: number;        // Número de filas para TextArea
+    placeholder?: string; // Texto de ayuda para el campo
 }
 
 // Interfaz para el resultado de la operación
@@ -68,13 +69,31 @@ export function ModalCreateInTable({
         setLoading(false);
     };
 
-    // Validar campos requeridos
+    // Validar campos requeridos y formato de fecha
     const validateForm = (): boolean => {
         const requiredFields = fields.filter(f => f.required);
         for (const field of requiredFields) {
             if (!formData[field.name]?.trim()) {
                 setError(`El campo ${field.label} es obligatorio`);
                 return false;
+            }
+            
+            // Validación específica para campos de tipo fecha
+            if (field.type === 'date') {
+                const dateValue = formData[field.name];
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                
+                if (!dateRegex.test(dateValue)) {
+                    setError(`El campo ${field.label} debe tener el formato YYYY-MM-DD`);
+                    return false;
+                }
+                
+                // Validar que la fecha sea válida
+                const date = new Date(dateValue);
+                if (isNaN(date.getTime())) {
+                    setError(`La fecha ingresada en ${field.label} no es válida`);
+                    return false;
+                }
             }
         }
         return true;
@@ -89,7 +108,19 @@ export function ModalCreateInTable({
         setSuccess(null);
 
         try {
-            const result = await onSave(formData);
+            // Preparar los datos para el envío
+            const processedData = { ...formData };
+            fields.forEach(field => {
+                if (field.type === 'date' && processedData[field.name]) {
+                    // Asegurarse de que la fecha esté en formato YYYY-MM-DD
+                    const date = new Date(processedData[field.name]);
+                    if (!isNaN(date.getTime())) {
+                        processedData[field.name] = date.toISOString().split('T')[0];
+                    }
+                }
+            });
+
+            const result = await onSave(processedData);
             
             if (result.ok) {
                 setSuccess(result.message || `${entityName} creado exitosamente`);
@@ -135,11 +166,22 @@ export function ModalCreateInTable({
                                         {field.label}
                                         {field.required && <span className="text-red-500 ml-1">*</span>}
                                     </Label>
-                                    <TextArea
-                                        value={formData[field.name] || ''}
-                                        onChange={(val: string) => handleChange(field.name, val)}
-                                        rows={field.rows || 1}
-                                    />
+                                    {field.type === 'date' ? (
+                                        <input
+                                            type="date"
+                                            value={formData[field.name] || ''}
+                                            onChange={(e) => handleChange(field.name, e.target.value)}
+                                            className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder={field.placeholder}
+                                        />
+                                    ) : (
+                                        <TextArea
+                                            value={formData[field.name] || ''}
+                                            onChange={(val: string) => handleChange(field.name, val)}
+                                            rows={field.rows || 1}
+                                            placeholder={field.placeholder}
+                                        />
+                                    )}
                                 </div>
                             ))}
                         </div>

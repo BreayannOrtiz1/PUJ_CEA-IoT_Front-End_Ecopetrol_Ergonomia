@@ -12,20 +12,21 @@ import Buttons from "./pages/UiElements/Buttons";
 import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
-import BasicTables from "./pages/Tables/BasicTables";
+//import BasicTables from "./pages/Tables/BasicTables";
 import FormElements from "./pages/Forms/FormElements";
-import RegisterLugar from "./pages/Forms/RegisterLugar";
-import RegisterSensor from "./pages/Forms/RegisterSensor";
-import RegisterNodo from "./pages/Forms/RegisterNodoIoT";
-import RegisterMedida from "./pages/Forms/RegisterMedida";
-import RegisterTrabajador from "./pages/Forms/RegisterTrabajador";
-import RegisterEdad from "./pages/Forms/RegisterEdad";
+import LugarInterface from "./pages/Forms/LugarInterface";
+import SensorInterface from "./pages/Forms/SensorInterface";
+import NodoInterface from "./pages/Forms/NodoIoTInterface";
+import MedidaInterface from "./pages/Forms/MedidaInterface";
+import TrabajadorInterface from "./pages/Forms/TrabajadorInterface";
+import EdadInterface from "./pages/Forms/EdadInterface";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CRUDTable from "./pages/Tables/CRUDTable";
 import GatewayInterface from "./pages/Forms/GatewayInterface";
+import RangoEdadInterface from "./pages/Forms/RangoEdadInterface";
 
 export default function App() {
   return (
@@ -45,12 +46,13 @@ export default function App() {
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
             <Route path="/gateway" element={<GatewayInterface />} />
-            <Route path="/register-lugar" element={<RegisterLugar />} />
-            <Route path="/register-edad" element={<RegisterEdad />} />
-            <Route path="/register-sensor" element={<RegisterSensor />} />
-            <Route path="/register-nodo" element={<RegisterNodo />} />
-            <Route path="/register-medida" element={<RegisterMedida />} />
-            <Route path="/register-trabajador" element={<RegisterTrabajador />} />
+            <Route path="/lugar" element={<LugarInterface />} />
+            <Route path="/edad" element={<EdadInterface />} />
+            <Route path="/sensor" element={<SensorInterface />} />
+            <Route path="/nodo" element={<NodoInterface />} />
+            <Route path="/medida" element={<MedidaInterface />} />
+            <Route path="/trabajador" element={<TrabajadorInterface />} />
+            <Route path="/rangoedad" element={<RangoEdadInterface />} />
 
             {/* Tables */}
             <Route path="/basic-tables" element={<CRUDTable />} />

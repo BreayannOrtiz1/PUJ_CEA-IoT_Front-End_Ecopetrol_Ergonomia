@@ -27,6 +27,20 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
+    name: "Registro",
+    icon: <ListIcon />,
+    subItems: [ 
+      { name: "Gateway", path: "/gateway", pro: false },
+      { name: "Lugar", path: "/lugar", pro: false }, 
+       
+      { name: "Nodo IoT", path: "/nodo", pro: false }, 
+      { name: "Sensor", path: "/sensor", pro: false }, 
+      { name: "Trabajador", path: "/trabajador", pro: false },
+      { name: "Rango de Edad", path: "/rangoedad", pro: false },
+      { name: "Medida", path: "/medida", pro: false },
+    { name: "Elements", path: "/form-elements", pro: false }],
+  },
+  {
     icon: <GridIcon />,
     name: "Dashboard",
     subItems: [{ name: "Ecommerce", path: "/", pro: false }],
@@ -41,23 +55,12 @@ const navItems: NavItem[] = [
     name: "User Profile",
     path: "/profile",
   },
-  {
-    name: "Registro",
-    icon: <ListIcon />,
-    subItems: [{ name: "Elements", path: "/form-elements", pro: false }, 
-      { name: "Gateway", path: "/gateway", pro: false },
-      { name: "Lugar", path: "/register-lugar", pro: false }, 
-      { name: "Medida", path: "/register-medida", pro: false }, 
-      { name: "Nodo IoT", path: "/register-nodo", pro: false }, 
-      { name: "Rango Edad", path: "/register-edad", pro: false }, 
-      { name: "Sensor", path: "/register-sensor", pro: false }, 
-      { name: "Trabajador", path: "/register-trabajador", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
+  
+  // {
+  //   name: "Tables",
+  //   icon: <TableIcon />,
+  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+  // },
   {
     name: "Pages",
     icon: <PageIcon />,

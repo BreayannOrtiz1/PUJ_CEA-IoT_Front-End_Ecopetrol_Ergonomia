@@ -3,7 +3,7 @@ import ComponentCard from "../../common/ComponentCard";
 import TextArea from "../input/TextArea";
 import Label from "../Label";
 import Button from "../../ui/button/Button";
-import { useGateway } from "../../../hooks/useRegister";
+import { useCRUD } from "../../../hooks/useCRUD";
 
 /**
  * Componente de registro de Gateway.
@@ -28,7 +28,7 @@ export default function InputGateway({ onOperationComplete }: InputGatewayProps)
   });
 
   // Hook que encapsula la interacción con el backend
-  const { registrar_gateway, loading, error, resultado } = useGateway();
+  const { registrar_gateway, loading, error, resultado } = useCRUD();
 
 //   /**
 //    * Actualiza un campo específico del formData.

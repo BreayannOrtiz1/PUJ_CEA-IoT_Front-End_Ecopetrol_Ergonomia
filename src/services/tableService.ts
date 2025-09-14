@@ -15,16 +15,17 @@ export interface ApiResponse<T> {
  */
 export async function listAll(tableName: string): Promise<ApiResponse<any>> {
     console.log("Inside listAll, tableName:", tableName);
+    //const tableNameJson = { tableName: tableName };
     try {   //http://4.150.10.133:8090/api/v1/gateways
         //const tableNameJson = {tableName : tableName};
         //console.log(`Datos enviados a: ${API_BASE_URL}/${tableName}`);
-        const response = await fetch(`${API_BASE_URL}/${tableName}`, {
+        const response = await fetch(`${API_BASE_URL}/gateway/?tableName=${tableName}`, {   // simpre se usa /gateway en el backend para listar cualquier tabla
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            //body: JSON.stringify(tableNameJson),
+            //body: JSON.stringify(tableNameJson),  // Usar body en GET no es permmitido
         });
         //console.log(response);
         if (!response.ok) {

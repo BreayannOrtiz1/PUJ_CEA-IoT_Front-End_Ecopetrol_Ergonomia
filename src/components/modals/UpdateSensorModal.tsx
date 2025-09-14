@@ -1,19 +1,26 @@
-
 import { ModalCreateInTable } from "../common/ModalCreateInTable";
 
 /**
- * Campos para actualizar un gateway
+ * Campos para actualizar un sensor
  * El ID es requerido, los demás campos son opcionales
  */
-const updateGatewayFields = [
-    { name: "ID_Gateway", label: "ID del Gateway", required: true },
-    { name: "marca", label: "Marca", required: false },
-    { name: "referencia", label: "Referencia", required: false },
-    { name: "serial", label: "Serial", required: false },
-    { name: "os", label: "Sistema Operativo", required: false },
-    { name: "ssid", label: "SSID", required: false },
-    { name: "macWifi", label: "MAC WiFi", required: false },
-    { name: "macEthernet", label: "MAC Ethernet", required: false }
+const updateSensorFields = [
+    { name: "ID_Sensor", label: "ID del Sensor", required: true },
+    { name: "Marca", label: "Marca", required: false },
+    { name: "Modelo", label: "Modelo", required: false },
+    { name: "Variable", label: "Variable", required: false },
+    { name: "Unidad", label: "Unidad", required: false },
+    { name: "ValorMaximo", label: "Valor Máximo", required: false },
+    { name: "ValorMinimo", label: "Valor Mínimo", required: false },
+    { name: "Resolucion", label: "Resolución", required: false },
+    { name: "MAC", label: "MAC", required: false },
+    { 
+        name: "FechaUltimaCalibracion", 
+        label: "Fecha Última Calibración (YYYY-MM-DD)", 
+        required: true, 
+        type: "date",
+        placeholder: "Formato: YYYY-MM-DD"
+    }
 ];
 
 /**
@@ -26,45 +33,44 @@ interface OperationResult {
 }
 
 /**
- * Props del componente UpdateGatewayModal
+ * Props del componente UpdateSensorModal
  */
-interface UpdateGatewayModalProps {
+interface UpdateSensorModalProps {
     isOpen: boolean;                                      // Controla la visibilidad del modal
     onClose: () => void;                                 // Función para cerrar el modal
     onSave: (formData: any) => Promise<OperationResult>; // Callback para actualizar en la base de datos
-    initialData?: any;                                   // Datos iniciales del gateway a actualizar
+    initialData?: any;                                   // Datos iniciales del sensor a actualizar
 }
 
 /**
- * Componente modal específico para la actualización de Gateways.
+ * Componente modal específico para la actualización de Sensores.
  * Maneja la lógica de actualización de forma independiente.
  */
-export const UpdateGatewayModal = ({ 
+export const UpdateSensorModal = ({ 
     isOpen, 
     onClose, 
     onSave,
-}: UpdateGatewayModalProps) => {
+}: UpdateSensorModalProps) => {
     
     /**
      * Valida que el formulario tenga los datos mínimos necesarios:
-     * - ID del Gateway (requerido)
+     * - ID del Sensor (requerido)
      * - Al menos un campo adicional para actualizar
      */
     const validateFormData = (data: any): boolean => {
         // Verificar que existe el ID
-        if (!data.ID_Gateway) return false;
-        if (!data.referencia) return false;
-
+        if (!data.ID_Sensor) return false;
+        
         // Verificar que al menos un campo adicional tenga valor
-        const hasAtLeastOneField = updateGatewayFields
-            .filter(field => field.name !== 'ID_Gateway')
+        const hasAtLeastOneField = updateSensorFields
+            .filter(field => field.name !== 'ID_Sensor')
             .some(field => data[field.name]?.trim() !== '');
 
         return hasAtLeastOneField;
     };
     
     /**
-     * Función para manejar la actualización del gateway
+     * Función para manejar la actualización del sensor
      */
     const handleSave = async (formData: any) => {
         try {
@@ -72,7 +78,7 @@ export const UpdateGatewayModal = ({
             if (!validateFormData(formData)) {
                 return {
                     ok: false,
-                    message: "Se requiere el ID del Gateway que desea modificar y la referencia,  y al menos un campo para actualizar",
+                    message: "Se requiere el ID del Sensor que desea modificar y al menos un campo para actualizar",
                     data: null
                 };
             }
@@ -91,7 +97,7 @@ export const UpdateGatewayModal = ({
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al actualizar el gateway",
+                message: error.message || "Error al actualizar el sensor",
                 data: null
             };
         }
@@ -102,10 +108,10 @@ export const UpdateGatewayModal = ({
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Actualizar Gateway"
-            description="Se requiere el ID del Gateway que desea modificar y al menos un campo para actualizar"
-            fields={updateGatewayFields}
-            entityName="Gateway"
+            title="Actualizar Sensor"
+            description="Se requiere el ID del Sensor que desea modificar y al menos un campo para actualizar"
+            fields={updateSensorFields}
+            entityName="Sensor"
         />
     );
 };

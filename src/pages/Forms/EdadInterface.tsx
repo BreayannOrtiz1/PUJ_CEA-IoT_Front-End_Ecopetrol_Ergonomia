@@ -3,7 +3,7 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import ResultOfOperation from "../Tables/ResultOfOperation";
 
-export default function RegisterNodoIoT() {
+export default function EdadInterface() {
   const [operationResult, setOperationResult] = useState<{
     ok?: boolean;
     message?: string;

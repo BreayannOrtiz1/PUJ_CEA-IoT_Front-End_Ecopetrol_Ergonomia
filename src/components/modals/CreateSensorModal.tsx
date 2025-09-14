@@ -1,18 +1,25 @@
-
 import { ModalCreateInTable } from "../common/ModalCreateInTable";
 
 /**
- * Definición de los campos del formulario para Gateway
+ * Definición de los campos del formulario para Sensor
  * Todos los campos son requeridos para la creación
  */
-const gatewayFields = [
-    { name: "marca", label: "Marca", required: true },
-    { name: "referencia", label: "Referencia", required: true },
-    { name: "serial", label: "Serial", required: true },
-    { name: "os", label: "Sistema Operativo", required: true },
-    { name: "ssid", label: "SSID", required: true },
-    { name: "macWifi", label: "MAC WiFi", required: true },
-    { name: "macEthernet", label: "MAC Ethernet", required: true }
+const sensorFields = [
+    { name: "Marca", label: "Marca", required: true },
+    { name: "Modelo", label: "Modelo", required: true },
+    { name: "Variable", label: "Variable", required: true },
+    { name: "Unidad", label: "Unidad", required: true },
+    { name: "ValorMaximo", label: "Valor Máximo", required: true },
+    { name: "ValorMinimo", label: "Valor Mínimo", required: true },
+    { name: "Resolucion", label: "Resolución", required: true },
+    { name: "MAC", label: "MAC", required: true },
+    { 
+        name: "FechaUltimaCalibracion", 
+        label: "Fecha Última Calibración (YYYY-MM-DD)", 
+        required: true, 
+        type: "date",
+        placeholder: "Formato: YYYY-MM-DD"
+    }
 ];
 
 /**
@@ -25,23 +32,23 @@ interface OperationResult {
 }
 
 /**
- * Props del componente CreateGatewayModal
+ * Props del componente CreateSensorModal
  */
-interface CreateGatewayModalProps {
+interface CreateSensorModalProps {
     isOpen: boolean;                                      // Controla la visibilidad del modal
     onClose: () => void;                                 // Función para cerrar el modal
     onSave: (formData: any) => Promise<OperationResult>; // Callback para guardar en la base de datos
 }
 
 /**
- * Componente modal específico para la creación de Gateways.
- * Encapsula toda la lógica relacionada con la creación de un gateway.
+ * Componente modal específico para la creación de Sensores.
+ * Encapsula toda la lógica relacionada con la creación de un sensor.
  */
-export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayModalProps) => {
+export const CreateSensorModal = ({ isOpen, onClose, onSave }: CreateSensorModalProps) => {
     // Función para validar los datos antes de guardar
     const validateFormData = (formData: any): boolean => {
         // Verificar que todos los campos requeridos tengan valor
-        return gatewayFields.every(field => 
+        return sensorFields.every(field => 
             field.required ? formData[field.name]?.trim() !== '' : true
         );
     };
@@ -53,7 +60,7 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
             if (!validateFormData(formData)) {
                 return {
                     ok: false,
-                    message: "Todos los campos son requeridos para crear un gateway",
+                    message: "Todos los campos son requeridos para crear un sensor",
                     data: null
                 };
             }
@@ -72,7 +79,7 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al registrar el gateway",
+                message: error.message || "Error al registrar el sensor",
                 data: null
             };
         }
@@ -83,10 +90,10 @@ export const CreateGatewayModal = ({ isOpen, onClose, onSave }: CreateGatewayMod
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Crear nuevo Gateway"
-            description="Ingrese los datos del nuevo gateway que desea registrar"
-            fields={gatewayFields}
-            entityName="Gateway"
+            title="Crear nuevo Sensor"
+            description="Ingrese los datos del nuevo sensor. Todos los campos son obligatorios."
+            fields={sensorFields}
+            entityName="Sensor"
         />
     );
 };

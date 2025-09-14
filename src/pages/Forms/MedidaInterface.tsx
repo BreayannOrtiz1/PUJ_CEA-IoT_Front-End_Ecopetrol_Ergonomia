@@ -3,7 +3,7 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import ResultOfOperation from "../Tables/ResultOfOperation";
 
-export default function RegisterTrabajador() {
+export default function MedidaInterface() {
   const [operationResult, setOperationResult] = useState<{
     ok?: boolean;
     message?: string;

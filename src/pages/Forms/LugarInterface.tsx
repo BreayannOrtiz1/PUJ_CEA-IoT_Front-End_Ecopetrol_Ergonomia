@@ -3,12 +3,12 @@ import PageMeta from "../../components/common/PageMeta";
 import { DynamicTable } from "../../components/tables/BasicTables/DynamicTable";
 import { useModal } from "../../hooks/useModal";
 import { useCRUD } from "../../hooks/useCRUD";
-import { CreateGatewayModal } from "../../components/modals/CreateGatewayModal";
-import { UpdateGatewayModal } from "../../components/modals/UpdateGatewayModal";
-import { DeleteGatewayModal } from "../../components/modals/DeleteGatewayModal";
+import { CreateLugarModal } from "../../components/modals/CreateLugarModal";
+import { UpdateLugarModal } from "../../components/modals/UpdateLugarModal";
+import { DeleteLugarModal } from "../../components/modals/DeleteLugarModal";
 
 
-export default function GatewayInterface() {
+export default function LugarInterface() {
     // Estado para refrescar la tabla
     const [refreshKey, setRefreshKey] = useState(0);
 
@@ -20,9 +20,9 @@ export default function GatewayInterface() {
 
     // Hook para operaciones CRUD
     const { 
-        registrar_gateway, 
-        actualizar_gateway, 
-        eliminar_gateway 
+        registrar_lugar, 
+        actualizar_lugar, 
+        eliminar_lugar 
     } = useCRUD();
 
     // Función para refrescar la tabla
@@ -30,107 +30,105 @@ export default function GatewayInterface() {
         setRefreshKey(prev => prev + 1);
     };
     /**
-     * Interfaz para los datos de Gateway
+     * Interfaz para los datos de Lugar
      */
-    interface Gateway {
-        ID_Gateway?: number;
-        marca?: string;
-        referencia: string;
-        serial?: string;
-        os?: string;
-        ssid?: string;
-        macWifi?: string;
-        macEthernet?: string;
+    interface Lugar {
+        ID_Lugar?: number;
+        municipio?: string;
+        sede: string;
+        edificio?: string;
+        piso?: string;
+        area?: string;
     }
     /**
-     * Maneja la creación de un nuevo gateway.
+     * Maneja la creación de un nuevo lugar.
      * Esta función se pasa como callback al modal de creación.
      * Implementa el patrón Lifting State Up manteniendo la lógica de negocio en el componente padre.
      * 
-     * @param formData - Datos del formulario para crear el gateway
+     * @param formData - Datos del formulario para crear el lugar
      * @returns Objeto con el resultado de la operación
      */
     const handleCreate = async (formData: any) => {
         try {
-            const result = await registrar_gateway(formData);
+            const result = await registrar_lugar(formData);
             handleRefresh(); // Actualizar la tabla después del éxito
             return {
                 ok: true,
-                message: "Gateway registrado exitosamente",
+                message: "Lugar registrado exitosamente",
                 data: result
             };
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al registrar el gateway",
+                message: error.message || "Error al registrar el lugar",
                 data: null
             };
         }
     };
 
     /**
-     * Maneja la actualización de un gateway existente.
+     * Maneja la actualización de un lugar existente.
      * Callback para el modal de actualización.
      * 
-     * @param formData - Datos actualizados del gateway
+     * @param formData - Datos actualizados del lugar
      * @returns Objeto con el resultado de la operación
      */
     const handleUpdate = async (formData: any) => {
         try {
-            const result = await actualizar_gateway(formData);
+            const result = await actualizar_lugar(formData);
             handleRefresh(); // Actualizar la tabla después del éxito
             return {
                 ok: true,
-                message: "Gateway actualizado exitosamente",
+                message: "Lugar actualizado exitosamente",
                 data: result
             };
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al actualizar el gateway",
+                message: error.message || "Error al actualizar el lugar",
                 data: null
             };
         }
     };
 
     /**
-     * Maneja la eliminación de un gateway.
+     * Maneja la eliminación de un lugar.
      * Callback para el modal de eliminación.
      * 
-     * @param formData - Datos del gateway a eliminar (ID requerido)
+     * @param formData - Datos del lugar a eliminar (ID requerido)
      */
     const handleDelete = async (formData: any) => {
         try {
             // Validar que el ID existe
-            if (!formData.ID_Gateway) {
+            if (!formData.ID_Lugar) {
                 return {
                     ok: false,
-                    message: "Se requiere el ID del gateway para eliminar"
+                    message: "Se requiere el ID del lugar para eliminar"
                 };
             }
-            console.log("Inside handleDelete, ID_Gateway:", formData.ID_Gateway);
-            await eliminar_gateway(formData);
+            console.log("Inside handleDelete, ID_Lugar:", formData.ID_Lugar);
+            await eliminar_lugar(formData);
             handleRefresh();
             return {
                 ok: true,
-                message: "Gateway eliminado exitosamente"
+                message: "Lugar eliminado exitosamente"
             };
         } catch (error: any) {
             return {
                 ok: false,
-                message: error.message || "Error al eliminar el gateway"
+                message: error.message || "Error al eliminar el lugar"
             };
         }
     };
 
-    // Estado para el gateway seleccionado con tipo correcto
-    const [selectedGateway, setSelectedGateway] = useState<Gateway | null>(null);
+    // Estado para el lugar seleccionado con tipo correcto
+    const [selectedLugar, setSelectedLugar] = useState<Lugar | null>(null);
 
     return (
         <div>
             <PageMeta
-                title="Base de datos GATEWAYS"
-                description="En esta pagina podra agregar gateways, editar o elimarlos"
+                title="Base de datos Lugares"
+                description="En esta pagina podra agregar lugares, editar o elimarlos"
             />
             <div className="grid">
                 <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
@@ -154,7 +152,7 @@ export default function GatewayInterface() {
                                     fill=""
                                 />
                             </svg>
-                            Crear un nuevo Gateway
+                            Crear un nuevo Lugar
                         </button>
                         <button
                             onClick={openUpdateModal}
@@ -175,20 +173,20 @@ export default function GatewayInterface() {
                                     fill=""
                                 />
                             </svg>
-                            Editar un Gateway
+                            Editar un Lugar
                         </button>
                         <button
                             onClick={openDeleteModal}
                             className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-solid border-blue-500 bg-white px-4 py-3 text-sm font-medium text-red-700 shadow-theme-xs hover:bg-red-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                         >
-                            Eliminar un Gateway
+                            Eliminar un Lugar
                         </button>
 
                     </div>
                 </div>
                 <div className="flex justify-between items-center mb-5">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        GATEWAY REGISTRADOS
+                        LUGARES REGISTRADOS
                     </h3>
                     <button
                         onClick={handleRefresh}
@@ -210,39 +208,37 @@ export default function GatewayInterface() {
                         Actualizar
                     </button>
                 </div>
-                {/* Modal para crear gateway - Implementación de Lifting State Up */}
-                <CreateGatewayModal
+                {/* Modal para crear lugar - Implementación de Lifting State Up */}
+                <CreateLugarModal
                     isOpen={isCreateOpen}
                     onClose={closeCreateModal}
-                    onSave={handleCreate}  // Función para manejar la creación del gateway
+                    onSave={handleCreate}  // Función para manejar la creación del lugar
                 />
 
-                {/* Modal para actualizar gateway - Implementación de Lifting State Up */}
-                <UpdateGatewayModal
+                {/* Modal para actualizar lugar - Implementación de Lifting State Up */}
+                <UpdateLugarModal
                     isOpen={isUpdateOpen}
                     onClose={closeUpdateModal}
-                    onSave={handleUpdate}  // Función para manejar la actualización del gateway
-                    initialData={selectedGateway}  // Datos iniciales del gateway seleccionado
+                    onSave={handleUpdate}  // Función para manejar la actualización del lugar
+                    initialData={selectedLugar}  // Datos iniciales del lugar seleccionado
                 />
 
-                {/* Modal para eliminar gateway - Implementación de Lifting State Up */}
-                <DeleteGatewayModal
+                {/* Modal para eliminar lugar - Implementación de Lifting State Up */}
+                <DeleteLugarModal
                     isOpen={isDeleteOpen}
                     onClose={closeDeleteModal}
-                    onConfirm={handleDelete}  // Función para manejar la eliminación del gateway
-                    gatewayData={selectedGateway ? {
-                        ID_Gateway: selectedGateway.ID_Gateway,
-                        marca: selectedGateway.marca,
-                        referencia: selectedGateway.referencia
+                    onConfirm={handleDelete}  // Función para manejar la eliminación del lugar
+                    lugarData={selectedLugar ? {
+                        ID_Lugar: selectedLugar.ID_Lugar,
                     } : undefined}
                 />
 
-                {/* Tabla de gateways */}
+                {/* Tabla de lugares */}
                 <div className="space-y-1">
                     <DynamicTable
-                        tableName="gateway"
+                        tableName="Lugar"   // Nombre de la tabla en mayusculas
                         key={refreshKey}
-                        orderBy="ID_Gateway"
+                        orderBy="ID_Lugar"
                         orderDirection="asc"
                     />
                 </div>

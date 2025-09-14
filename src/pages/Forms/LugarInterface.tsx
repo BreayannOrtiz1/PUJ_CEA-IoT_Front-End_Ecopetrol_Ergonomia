@@ -122,7 +122,7 @@ export default function LugarInterface() {
     };
 
     // Estado para el lugar seleccionado con tipo correcto
-    const [selectedLugar, setSelectedLugar] = useState<Lugar | null>(null);
+    const [selectedLugar] = useState<Lugar | null>(null);
 
     return (
         <div>

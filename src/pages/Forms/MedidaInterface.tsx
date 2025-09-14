@@ -4,7 +4,7 @@ import PageMeta from "../../components/common/PageMeta";
 import ResultOfOperation from "../Tables/ResultOfOperation";
 
 export default function MedidaInterface() {
-  const [operationResult, setOperationResult] = useState<{
+  const [operationResult] = useState<{
     ok?: boolean;
     message?: string;
     data?: any;

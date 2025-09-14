@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Modal } from "../../components/ui/modal";
 import Button from "../../components/ui/button/Button";
@@ -6,14 +5,14 @@ import TextArea from "../form/input/TextArea";
 import Label from "../../components/form/Label";
 import { FormField, BaseFormData, ApiResponse } from '../../types/common';
 
-interface ModalCreateInTableProps<T extends BaseFormData = BaseFormData> {
+interface ModalCreateInTableProps<T extends BaseFormData> {
     isOpen: boolean;
     closeModal: () => void;
     onSave: (formData: T) => Promise<ApiResponse<T>>;
     title?: string;
     description?: string;
-    fields: FormField[];           // Lista de campos a mostrar
-    entityName: string;            // Nombre de la entidad (ej: "Gateway", "Sensor")
+    fields: FormField[];
+    entityName: string;
 }
 
 export function ModalCreateInTable<T extends BaseFormData>({
@@ -58,7 +57,7 @@ export function ModalCreateInTable<T extends BaseFormData>({
         const requiredFields = fields.filter(f => f.required);
         for (const field of requiredFields) {
             const value = formData[field.name];
-            if (!value || value.trim() === '') {
+            if (!value || !value.trim()) {
                 setError(`El campo ${field.label} es obligatorio`);
                 return false;
             }
@@ -93,20 +92,20 @@ export function ModalCreateInTable<T extends BaseFormData>({
 
         try {
             // Preparar los datos para el envío
-            const processedData: Record<string, string | number | boolean> = {};
+            const processedData = { ...formData } as unknown as T;
             fields.forEach(field => {
-                const value = formData[field.name];
-                if (field.type === 'date' && value) {
-                    const date = new Date(value);
-                    if (!isNaN(date.getTime())) {
-                        processedData[field.name] = date.toISOString().split('T')[0];
+                if (field.type === 'date') {
+                    const dateStr = (processedData as any)[field.name];
+                    if (dateStr) {
+                        const date = new Date(dateStr);
+                        if (!isNaN(date.getTime())) {
+                            (processedData as any)[field.name] = date.toISOString().split('T')[0];
+                        }
                     }
-                } else {
-                    processedData[field.name] = value;
                 }
             });
 
-            const result = await onSave(processedData as T);
+            const result = await onSave(processedData);
             
             if (result.ok) {
                 setSuccess(result.message || `${entityName} creado exitosamente`);
@@ -202,5 +201,3 @@ export function ModalCreateInTable<T extends BaseFormData>({
         </Modal>
     );
 }
-
-

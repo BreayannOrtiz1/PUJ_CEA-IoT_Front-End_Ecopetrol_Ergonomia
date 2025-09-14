@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { listAll, ApiResponse } from '../services/tableService';
+import { listAll } from '../services/tableService';
 
 interface UseTableResult {
     data: any[];           // Datos de la tabla

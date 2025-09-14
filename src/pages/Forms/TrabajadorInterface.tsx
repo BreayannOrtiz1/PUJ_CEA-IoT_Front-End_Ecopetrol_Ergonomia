@@ -102,7 +102,7 @@ export default function TrabajadorInterface() {
     }
   };
   // Estado para el NodoIoT seleccionado con tipo correcto
-  const [selectedTrabajador, setSelectedTrabajador] = useState<Trabajador | null>(null);
+  const [selectedTrabajador] = useState<Trabajador | null>(null);
 
 
   return (

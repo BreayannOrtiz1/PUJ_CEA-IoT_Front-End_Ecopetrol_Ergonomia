@@ -107,7 +107,7 @@ export default function RangoEdadInterface() {
   };
 
   // Estado para el seleccionado con tipo correcto
-  const [selectedRangoEdad, setSelectedRangoEdad] = useState<RangoEdad | null>(null);
+  const [selectedRangoEdad] = useState<RangoEdad | null>(null);
 
   return (
     <div>
@@ -215,8 +215,7 @@ export default function RangoEdadInterface() {
           onClose={closeDeleteModal}
           onConfirm={handleDelete}
           rangoEdadData={selectedRangoEdad ? {
-            ID_RangoEdad: selectedRangoEdad.ID_RangoEdad,
-
+            RangoEdad: selectedRangoEdad.ID_RangoEdad
           } : undefined}
         />
 

@@ -12,7 +12,7 @@ import {
   PageIcon,
   PieChartIcon,
   PlugInIcon,
-  TableIcon,
+
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
@@ -32,7 +32,6 @@ const navItems: NavItem[] = [
     subItems: [ 
       { name: "Gateway", path: "/gateway", pro: false },
       { name: "Lugar", path: "/lugar", pro: false }, 
-       
       { name: "Nodo IoT", path: "/nodo", pro: false }, 
       { name: "Sensor", path: "/sensor", pro: false }, 
       { name: "Trabajador", path: "/trabajador", pro: false },
@@ -43,7 +42,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    subItems: [{ name: "Default Dashboard", path: "/", pro: false }],
   },
   {
     icon: <CalenderIcon />,
@@ -318,14 +317,14 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/whiteL.png"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/darkL.png"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -333,7 +332,7 @@ const AppSidebar: React.FC = () => {
             </>
           ) : (
             <img
-              src="/images/logo/logo-icon.svg"
+              src="/images/logo/peq.png"
               alt="Logo"
               width={32}
               height={32}

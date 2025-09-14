@@ -124,7 +124,7 @@ export default function GatewayInterface() {
     };
 
     // Estado para el gateway seleccionado con tipo correcto
-    const [selectedGateway, setSelectedGateway] = useState<Gateway | null>(null);
+    const [selectedGateway] = useState<Gateway | null>(null);
 
     return (
         <div>

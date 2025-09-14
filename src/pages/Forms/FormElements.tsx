@@ -1,7 +1,5 @@
 import { useState } from "react";
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
-import InputGateway from "../../components/form/form-elements/InputGateway";
 import ResultOfOperation from "../Tables/ResultOfOperation";
 import DefaultInputs from "../../components/form/form-elements/DefaultInputs";
 import SelectInputs from "../../components/form/form-elements/SelectInputs";
@@ -15,7 +13,7 @@ import ToggleSwitch from "../../components/form/form-elements/ToggleSwitch";
 import DropzoneComponent from "../../components/form/form-elements/DropZone";
 
 export default function FormElements() {
-  const [operationResult, setOperationResult] = useState<{
+  const [operationResult] = useState<{
     ok?: boolean;
     message?: string;
     data?: any;

@@ -5,6 +5,9 @@ import Button from "../../components/ui/button/Button";
 import TextArea from "../form/input/TextArea";
 import Label from "../../components/form/Label";
 import { FormField, BaseFormData, ApiResponse } from '../../types/common';
+import { FormField, BaseFormData, ApiResponse } from '../../types/common';
+
+import { FormField, BaseFormData, ApiResponse } from '../../types/common';
 
 interface ModalCreateInTableProps<T extends BaseFormData = BaseFormData> {
     isOpen: boolean;
@@ -26,7 +29,7 @@ export function ModalCreateInTable<T extends BaseFormData>({
     entityName
 }: ModalCreateInTableProps<T>) {
     // Estado para el formulario
-    const [formData, setFormData] = useState<Record<string, string>>({});
+    const [formData, setFormData] = useState<Partial<T>>({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
@@ -34,9 +37,9 @@ export function ModalCreateInTable<T extends BaseFormData>({
     // Inicializar formData con campos vacíos
     useEffect(() => {
         setError(null);
-        const initialData: Record<string, string> = {};
+        const initialData: Partial<T> = {};
         fields.forEach(field => {
-            initialData[field.name] = '';
+            initialData[field.name as keyof T] = '' as any;
         });
         setFormData(initialData);
     }, [fields]);
@@ -57,23 +60,23 @@ export function ModalCreateInTable<T extends BaseFormData>({
     const validateForm = (): boolean => {
         const requiredFields = fields.filter(f => f.required);
         for (const field of requiredFields) {
-            const value = formData[field.name];
-            if (!value || value.trim() === '') {
+            if (!formData[field.name]?.trim()) {
                 setError(`El campo ${field.label} es obligatorio`);
                 return false;
             }
             
             // Validación específica para campos de tipo fecha
             if (field.type === 'date') {
+                const dateValue = formData[field.name];
                 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
                 
-                if (!dateRegex.test(value)) {
+                if (!dateRegex.test(dateValue)) {
                     setError(`El campo ${field.label} debe tener el formato YYYY-MM-DD`);
                     return false;
                 }
                 
                 // Validar que la fecha sea válida
-                const date = new Date(value);
+                const date = new Date(dateValue);
                 if (isNaN(date.getTime())) {
                     setError(`La fecha ingresada en ${field.label} no es válida`);
                     return false;
@@ -93,20 +96,18 @@ export function ModalCreateInTable<T extends BaseFormData>({
 
         try {
             // Preparar los datos para el envío
-            const processedData: Record<string, string | number | boolean> = {};
+            const processedData = { ...formData };
             fields.forEach(field => {
-                const value = formData[field.name];
-                if (field.type === 'date' && value) {
-                    const date = new Date(value);
+                if (field.type === 'date' && processedData[field.name]) {
+                    // Asegurarse de que la fecha esté en formato YYYY-MM-DD
+                    const date = new Date(processedData[field.name]);
                     if (!isNaN(date.getTime())) {
                         processedData[field.name] = date.toISOString().split('T')[0];
                     }
-                } else {
-                    processedData[field.name] = value;
                 }
             });
 
-            const result = await onSave(processedData as T);
+            const result = await onSave(processedData);
             
             if (result.ok) {
                 setSuccess(result.message || `${entityName} creado exitosamente`);

@@ -41,7 +41,7 @@ export default function SensorInterface() {
         valorMaximo?: string;
         valorMinimo?: string;
         resolucion?: string;
-        mac?: String;
+        mac?: string;
         fechaUltimaCalibracion?: Date;
     }
     /**
@@ -126,7 +126,7 @@ export default function SensorInterface() {
     };
 
     // Estado para el sensor seleccionado con tipo correcto
-    const [selectedSensor, setSelectedSensor] = useState<Sensor | null>(null);
+    const [selectedSensor] = useState<Sensor | null>(null);
 
     return (
         <div>

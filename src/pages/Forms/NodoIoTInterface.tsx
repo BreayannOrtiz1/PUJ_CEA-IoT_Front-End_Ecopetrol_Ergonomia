@@ -112,7 +112,7 @@ export default function NodoIoTInterface() {
   };
 
   // Estado para el NodoIoT seleccionado con tipo correcto
-  const [selectedNodoIoT, setSelectedNodoIoT] = useState<NodoIoT | null>(null);
+  const [selectedNodoIoT] = useState<NodoIoT | null>(null);
 
   return (
     <div>

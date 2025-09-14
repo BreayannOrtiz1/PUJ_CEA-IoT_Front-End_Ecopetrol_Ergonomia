@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import { useTable } from '../../../hooks/useTable';
-import Checkbox from "../../form/input/Checkbox";
+
 import {
     Table,
     TableBody,
@@ -37,8 +37,8 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
             if (a[sortConfig.key] === null) return 1;
             if (b[sortConfig.key] === null) return -1;
             
-            let aValue = a[sortConfig.key];
-            let bValue = b[sortConfig.key];
+            const aValue = a[sortConfig.key];
+            const bValue = b[sortConfig.key];
             
             // Intentar convertir a números si es posible
             const aNum = !isNaN(Number(aValue)) ? Number(aValue) : null;

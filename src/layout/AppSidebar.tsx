@@ -42,7 +42,8 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Default Dashboard", path: "/", pro: false }],
+    subItems: [{ name: "Data From Sensor", path: "/", pro: false },
+      { name: "Default Dashboard", path: "/defaultDB", pro: false }],
   },
   {
     icon: <CalenderIcon />,

@@ -27,6 +27,7 @@ import Home from "./pages/Dashboard/Home";
 import CRUDTable from "./pages/Tables/CRUDTable";
 import GatewayInterface from "./pages/Forms/GatewayInterface";
 import RangoEdadInterface from "./pages/Forms/RangoEdadInterface";
+import DataSensorTable from "./pages/Dashboard/DataSensorTable";
 
 export default function App() {
   return (
@@ -36,13 +37,10 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
+            <Route index path="/" element={<DataSensorTable />} />
+            <Route index path="/defaultDB" element={<Home />} />
 
-            {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
-
+           
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
             <Route path="/gateway" element={<GatewayInterface />} />
@@ -53,6 +51,11 @@ export default function App() {
             <Route path="/medida" element={<MedidaInterface />} />
             <Route path="/trabajador" element={<TrabajadorInterface />} />
             <Route path="/rangoedad" element={<RangoEdadInterface />} />
+            
+             {/* Others Page */}
+            <Route path="/profile" element={<UserProfiles />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/blank" element={<Blank />} />
 
             {/* Tables */}
             <Route path="/basic-tables" element={<CRUDTable />} />

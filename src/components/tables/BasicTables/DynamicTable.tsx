@@ -106,22 +106,22 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
 
 
             <Table>
-                <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                <TableHeader className="bg-gray-100 border-b border-gray-100 dark:border-white/[0.05]">
                     <TableRow>
                         {columns.map((column, index) => (
                             <TableCell 
                                 isHeader 
                                 key={index} 
-                                className="px-6 py-2"
+                                className="px-4 py-2 "
                             >
                                 <div 
-                                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.02] p-2 rounded transition-colors"
+                                    className="text-start gap-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.02] p-1 rounded transition-colors"
                                     onClick={() => requestSort(column)}
                                 >
                                     {column}
                                     {sortConfig.key === column && (
                                         <span className="text-gray-400">
-                                            {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                                            {sortConfig.direction === 'asc' ? '↓' :'↑' }
                                         </span>
                                     )}
                                 </div>
@@ -137,7 +137,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
                         >   {columns.map((column, colIndex) => (
                             <TableCell 
                                 key={`${rowIndex}-${colIndex}`} 
-                                className={`px-4 py-1 text-gray-500 text-start text-theme-sm dark:text-gray-400 ${
+                                className={`px-2 py-1 text-gray-500 text-start text-theme-sm dark:text-gray-400 ${
                                     sortConfig.key === column ? 'bg-gray-50/50 dark:bg-white/[0.02]' : ''
                                 }`}
                             >

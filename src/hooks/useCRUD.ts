@@ -5,6 +5,7 @@ import { registrarGateway, actualizarGateway, eliminarGateway, Gateway,
          registrarNodoIoT, actualizarNodoIoT, eliminarNodoIoT, NodoIoT,
          registrarSensor, actualizarSensor, eliminarSensor, Sensor,
          registrarTrabajador, actualizarTrabajador, eliminarTrabajador, Trabajador,
+         registrarMedida, actualizarMedida, eliminarMedida, Medida,
          registrarRangoEdad, actualizarRangoEdad, eliminarRangoEdad, RangoEdad } from "../services/CRUDService";
 
 export function useCRUD() {
@@ -277,6 +278,51 @@ export function useCRUD() {
     }
   };
 
+  const registrar_medida = async (medida: Medida) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await registrarMedida(medida);
+      setResultado(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const actualizar_medida = async (medida: Medida) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await actualizarMedida(medida);
+      setResultado(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const eliminar_medida = async (medida: Medida) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await eliminarMedida(medida);
+      setResultado(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return { 
     registrar_lugar, actualizar_lugar, eliminar_lugar,
     registrar_gateway, actualizar_gateway, eliminar_gateway,
@@ -284,6 +330,7 @@ export function useCRUD() {
     registrar_sensor, actualizar_sensor, eliminar_sensor,
     registrar_trabajador, actualizar_trabajador, eliminar_trabajador,
     registrar_rangoedad, actualizar_rangoedad, eliminar_rangoedad,
+    registrar_medida, actualizar_medida, eliminar_medida,
     loading, error, resultado 
   };
 }

@@ -56,6 +56,16 @@ export interface RangoEdad {
   Maximo?: number;
 }
 
+export interface Medida {
+  ID_Medida?: number;
+  ID_Trabajador?: number; // Required
+  ID_NodoIoT?: number;    // Required
+  ID_Lugar?: number;     // Required
+  ID_Sensor?: number;    // Required
+  Fecha_Inicio?: string; // Required
+  Fecha_Fin?: string;    // Required
+}
+
 export async function registrarGateway(gateway: Gateway) {
   try {
     // Validación de campos requeridos
@@ -722,6 +732,118 @@ export async function eliminarRangoEdad(rangoedad: RangoEdad) {
     return await res.json();
   } catch (error) {
     console.error("Error en eliminarRangoedad:", error);
+    throw error;
+  }
+}
+
+export async function registrarMedida(medida: Medida) {
+  try {
+    // Validación de campos requeridos
+    if (!medida.ID_Trabajador || !medida.ID_NodoIoT || !medida.ID_Lugar || 
+        !medida.ID_Sensor || !medida.Fecha_Inicio || !medida.Fecha_Fin) {
+      throw new Error("Todos los campos son requeridos");
+    }
+
+    // Crear el objeto de datos
+    const medidaData = {
+      ID_Trabajador: medida.ID_Trabajador,
+      ID_NodoIoT: medida.ID_NodoIoT,
+      ID_Lugar: medida.ID_Lugar,
+      ID_Sensor: medida.ID_Sensor,
+      Fecha_Inicio: medida.Fecha_Inicio,
+      Fecha_Fin: medida.Fecha_Fin
+      
+    };
+
+    console.log(medidaData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(medidaData),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error en el servidor: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error en registrarMedida:", error);
+    throw error;
+  }
+}
+
+export async function actualizarMedida(medida: Medida) {
+  try {
+    // Validación de campos requeridos
+    if (!medida.ID_Medida) {
+      throw new Error("El ID de la Medida es requerido");
+    }
+
+    // Crear el objeto de datos
+    const medidaData = {
+      ID: medida.ID_Medida,
+      ...(medida.ID_Trabajador && { ID_Trabajador: medida.ID_Trabajador }),
+      ...(medida.ID_NodoIoT && { ID_NodoIoT: medida.ID_NodoIoT}),
+      ...(medida.ID_Lugar && { ID_Lugar: medida.ID_Lugar}),
+      ...(medida.ID_Sensor && { ID_Sensor: medida.ID_Sensor}),
+      ...(medida.Fecha_Inicio && { Fecha_Inicio: medida.Fecha_Inicio}),
+      ...(medida.Fecha_Fin && { Fecha_Fin: medida.Fecha_Fin})
+    };
+
+    console.log(medidaData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(medidaData),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error en el servidor: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error en actualizarMedida:", error);
+    throw error;
+  }
+}
+
+export async function eliminarMedida(medida: Medida) {
+  try {
+    // Validación de campos requeridos
+    if (!medida.ID_Medida) {
+      throw new Error("El ID de la Medida es requerido");
+    }
+
+    // Crear el objeto de datos
+    const medidaData = {
+      ID: medida.ID_Medida
+    };
+
+    console.log(medidaData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/remove", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(medidaData),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error en el servidor: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error en eliminarMedida:", error);
     throw error;
   }
 }

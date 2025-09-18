@@ -78,6 +78,12 @@ export interface DeleteModalProps<T> extends BaseModalProps {
     entityData?: T;
 }
 
+// Interfaz para opciones de selección
+export interface SelectOption {
+    value: string;
+    label: string;
+}
+
 // Interfaz para campos de formulario
 export interface FormField {
     name: string;
@@ -86,6 +92,8 @@ export interface FormField {
     type?: string;
     rows?: number;
     placeholder?: string;
+    options?: SelectOption[];
+    loadOptions?: () => Promise<SelectOption[]>;
 }
 
 // Tipo para ordenamiento

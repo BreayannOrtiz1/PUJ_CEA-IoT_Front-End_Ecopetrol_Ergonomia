@@ -61,10 +61,8 @@ export interface Provision_Fisiologicas {
   ID_Provision_Fisiologicas?: number;
   ID_Trabajador?: number; // Required
   ID_NodoIoT?: number;    // Required
-  ID_Lugar?: number;     // Required
   ID_Sensor?: number;    // Required
-  Fecha_Inicio?: string; 
-  Fecha_Fin?: string;    
+  ID_Config_Provision_Gateways?: number;
 }
 
 export interface IDs {
@@ -766,8 +764,7 @@ export async function getIDs(ids: IDs) {
 export async function registrarProvision_Fisiologicas(Provision_Fisiologicas: Provision_Fisiologicas) {
   try {
     // Validación de campos requeridos
-    if (!Provision_Fisiologicas.ID_Trabajador || !Provision_Fisiologicas.ID_NodoIoT || !Provision_Fisiologicas.ID_Lugar || 
-        !Provision_Fisiologicas.ID_Sensor || !Provision_Fisiologicas.Fecha_Inicio || !Provision_Fisiologicas.Fecha_Fin) {
+    if (!Provision_Fisiologicas.ID_Trabajador || !Provision_Fisiologicas.ID_NodoIoT || !Provision_Fisiologicas.ID_Config_Provision_Gateways) {
       throw new Error("Todos los campos son requeridos");
     }
 
@@ -775,15 +772,13 @@ export async function registrarProvision_Fisiologicas(Provision_Fisiologicas: Pr
     const Provision_FisiologicasData = {
       ID_Trabajador: Provision_Fisiologicas.ID_Trabajador,
       ID_NodoIoT: Provision_Fisiologicas.ID_NodoIoT,
-      ID_Lugar: Provision_Fisiologicas.ID_Lugar,
       ID_Sensor: Provision_Fisiologicas.ID_Sensor,
-      Fecha_Inicio: Provision_Fisiologicas.Fecha_Inicio,
-      Fecha_Fin: Provision_Fisiologicas.Fecha_Fin
+      ID_Config_Provision_Gateways: Provision_Fisiologicas.ID_Config_Provision_Gateways
       
     };
 
     console.log(Provision_FisiologicasData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/register", {
+    const res = await fetch("http://4.150.10.133:8090/api/v1/provision/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -815,14 +810,12 @@ export async function actualizarProvision_Fisiologicas(Provision_Fisiologicas: P
       ID: Provision_Fisiologicas.ID_Provision_Fisiologicas,
       ...(Provision_Fisiologicas.ID_Trabajador && { ID_Trabajador: Provision_Fisiologicas.ID_Trabajador }),
       ...(Provision_Fisiologicas.ID_NodoIoT && { ID_NodoIoT: Provision_Fisiologicas.ID_NodoIoT}),
-      ...(Provision_Fisiologicas.ID_Lugar && { ID_Lugar: Provision_Fisiologicas.ID_Lugar}),
       ...(Provision_Fisiologicas.ID_Sensor && { ID_Sensor: Provision_Fisiologicas.ID_Sensor}),
-      ...(Provision_Fisiologicas.Fecha_Inicio && { Fecha_Inicio: Provision_Fisiologicas.Fecha_Inicio}),
-      ...(Provision_Fisiologicas.Fecha_Fin && { Fecha_Fin: Provision_Fisiologicas.Fecha_Fin})
+      ...(Provision_Fisiologicas.ID_Config_Provision_Gateways && { ID_Config_Provision_Gateways: Provision_Fisiologicas.ID_Config_Provision_Gateways})
     };
 
     console.log(Provision_FisiologicasData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/update", {
+    const res = await fetch("http://4.150.10.133:8090/api/v1/provision/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -855,7 +848,7 @@ export async function eliminarProvision_Fisiologicas(Provision_Fisiologicas: Pro
     };
 
     console.log(Provision_FisiologicasData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/remove", {
+    const res = await fetch("http://4.150.10.133:8090/api/v1/provision/remove", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

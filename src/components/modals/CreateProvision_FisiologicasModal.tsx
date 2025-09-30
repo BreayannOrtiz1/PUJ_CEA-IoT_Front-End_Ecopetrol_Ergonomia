@@ -33,13 +33,13 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
   const [selectOptions, setSelectOptions] = useState<{
     trabajadores: SelectOption[];
     nodos: SelectOption[];
-    //lugares: SelectOption[];
     sensores: SelectOption[];
+    gatewayprov: SelectOption[];
   }>({
     trabajadores: [],
     nodos: [],
-    //lugares: [],
-    sensores: []
+    sensores: [],
+    gatewayprov: []
   });
 
   // Estado para controlar si se están cargando las opciones
@@ -72,11 +72,6 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
             idColumn: "ID_Sensor",
             displayColumn: "Modelo"
           },
-          // {
-          //   name: "Lugar",
-          //   idColumn: "ID_Lugar",
-          //   displayColumn: "Nombre"
-          // },
           {
             name: "Trabajador",
             idColumn: "ID_Trabajador",
@@ -127,12 +122,12 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
         label: `${item.id} - ${item.display}`
       })) || [];
 
-      // const lugarOptions = data.Lugar?.map((item: any) => ({
-      //   value: item.id.toString(),
-      //   label: `${item.id} - ${item.display}`
-      // })) || [];
-
       const trabajadorOptions = data.Trabajador?.map((item: any) => ({
+        value: item.id.toString(),
+        label: `${item.id} - ${item.display}`
+      })) || [];
+
+      const gatewayProvisionOptions = data.Config_Provision_Gateways?.map((item: any) => ({
         value: item.id.toString(),
         label: `${item.id} - ${item.display}`
       })) || [];
@@ -142,9 +137,8 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
       setSelectOptions({
         nodos: nodoOptions,
         sensores: sensorOptions,
-        trabajadores: trabajadorOptions
-        //lugares: lugarOptions,
-        
+        trabajadores: trabajadorOptions,
+        gatewayprov: gatewayProvisionOptions        
       });
 
     } catch (error: any) {
@@ -182,15 +176,6 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
         ? [{ value: "", label: "Cargando opciones..." }] 
         : selectOptions.nodos
     },
-    // {
-    //   name: "ID_Lugar",
-    //   label: "Lugar",
-    //   required: true,
-    //   type: 'select' as const,
-    //   options: loadingOptions 
-    //     ? [{ value: "", label: "Cargando opciones..." }] 
-    //     : selectOptions.lugares
-    // },
     {
       name: "ID_Sensor",
       label: "Sensor",
@@ -210,6 +195,17 @@ export const CreateProvision_FisiologicasModal = ({ isOpen, onClose, onSave }: C
         ? [{ value: "", label: "Cargando opciones..." }] 
         : selectOptions.trabajadores
     },
+    {
+      name: "ID_Config_Provision_Gateways",
+      label: "ID Gateway Provisionado",
+      required: true,
+      type: 'select' as const,
+      // Si está cargando, mostrar mensaje. Si no, mostrar las opciones obtenidas
+      options: loadingOptions 
+        ? [{ value: "", label: "Cargando opciones..." }] 
+        : selectOptions.gatewayprov
+    }
+
     // {
     //   name: "Fecha_Inicio",
     //   label: "Fecha de Inicio",

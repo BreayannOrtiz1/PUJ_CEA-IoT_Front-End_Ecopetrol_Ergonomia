@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import LugarInterface from "./pages/Forms/LugarInterface";
 import SensorInterface from "./pages/Forms/SensorInterface";
 import NodoInterface from "./pages/Forms/NodoIoTInterface";
-import MedidaInterface from "./pages/Forms/MedidaInterface";
+import Provision_FisiologicasInterface from "./pages/Forms/Provision_FisiologicasInterface";
 import TrabajadorInterface from "./pages/Forms/TrabajadorInterface";
 import EdadInterface from "./pages/Forms/EdadInterface";
 import Blank from "./pages/Blank";
@@ -48,7 +48,7 @@ export default function App() {
             <Route path="/edad" element={<EdadInterface />} />
             <Route path="/sensor" element={<SensorInterface />} />
             <Route path="/nodo" element={<NodoInterface />} />
-            <Route path="/medida" element={<MedidaInterface />} />
+            <Route path="/fisiologicas" element={<Provision_FisiologicasInterface />} />
             <Route path="/trabajador" element={<TrabajadorInterface />} />
             <Route path="/rangoedad" element={<RangoEdadInterface />} />
             

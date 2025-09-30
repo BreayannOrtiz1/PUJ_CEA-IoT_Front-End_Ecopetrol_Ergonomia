@@ -12,6 +12,7 @@ export interface Sensor {
   FechaUltimaCalibracion?: string;
 }
 
+
 export interface Gateway {
   ID_Gateway?: number;
   marca?: string;
@@ -26,7 +27,7 @@ export interface Gateway {
 export interface Trabajador {
   ID_Trabajador?: number;
   Sexo?: string;       // Required
-  Rango_Edad?: string; // Required
+  ID_Rango_Edad?: string; // Required
   Cargo?: string;      // Required
 }
 
@@ -56,14 +57,22 @@ export interface RangoEdad {
   Maximo?: number;
 }
 
-export interface Medida {
-  ID_Medida?: number;
+export interface Provision_Fisiologicas {
+  ID_Provision_Fisiologicas?: number;
   ID_Trabajador?: number; // Required
   ID_NodoIoT?: number;    // Required
   ID_Lugar?: number;     // Required
   ID_Sensor?: number;    // Required
-  Fecha_Inicio?: string; // Required
-  Fecha_Fin?: string;    // Required
+  Fecha_Inicio?: string; 
+  Fecha_Fin?: string;    
+}
+
+export interface IDs {
+  ID_Provision_Fisiologicas?: number;
+  ID_Trabajador?: number; 
+  ID_NodoIoT?: number;    
+  ID_Lugar?: number;     
+  ID_Sensor?: number;    
 }
 
 export async function registrarGateway(gateway: Gateway) {
@@ -414,14 +423,14 @@ export async function eliminarNodoIoT(nodoIoT: NodoIoT) {
 export async function registrarTrabajador(trabajador: Trabajador) {
   try {
     // Validación de campos requeridos
-    if (!trabajador.Sexo || !trabajador.Rango_Edad || !trabajador.Cargo) {
+    if (!trabajador.Sexo || !trabajador.ID_Rango_Edad || !trabajador.Cargo) {
       throw new Error("Todos los campos son requeridos");
     }
 
     // Crear el objeto de datos
     const trabajadorData = {
       Sexo: trabajador.Sexo,
-      Rango_Edad: trabajador.Rango_Edad,
+      Rango_Edad: trabajador.ID_Rango_Edad,
       Cargo: trabajador.Cargo
     };
 
@@ -457,7 +466,7 @@ export async function actualizarTrabajador(trabajador: Trabajador) {
     const trabajadorData = {
       ID: trabajador.ID_Trabajador,
       ...(trabajador.Sexo && { Sexo: trabajador.Sexo }),
-      ...(trabajador.Rango_Edad && { Rango_Edad: trabajador.Rango_Edad }),
+      ...(trabajador.ID_Rango_Edad && { Rango_Edad: trabajador.ID_Rango_Edad }),
       ...(trabajador.Cargo && { Cargo: trabajador.Cargo })
     };
 
@@ -636,13 +645,12 @@ export async function eliminarSensor(sensor: Sensor) {
 export async function registrarRangoEdad(rangoedad: RangoEdad) {
   try {
     // Validación de campos requeridos
-    if (!rangoedad.Minimo || !rangoedad.Maximo || !rangoedad.RangoEdad) {
+    if (!rangoedad.Minimo || !rangoedad.Maximo ) {
       throw new Error("Todos los campos son requeridos");
     }
 
     // Crear el objeto de datos
     const rangoEdadData = {
-      RangoEdad: rangoedad.RangoEdad,
       Minimo: rangoedad.Minimo,
       Maximo: rangoedad.Maximo
     };
@@ -736,33 +744,52 @@ export async function eliminarRangoEdad(rangoedad: RangoEdad) {
   }
 }
 
-export async function registrarMedida(medida: Medida) {
+export async function getIDs(ids: IDs) {
+  try {
+    const res = await fetch("http://4.150.10.133:8090/api/v1/provisionamiento/getids",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"},
+    body: JSON.stringify(ids)
+  })
+  if(!res.ok){
+    throw new Error(`Error en el servidor: ${res.statusText}`);
+  }
+  return await res.json();
+  }catch (error) {
+    console.error("Error en registrarProvision_Fisiologicas:", error);
+    throw error;
+  }
+}
+
+export async function registrarProvision_Fisiologicas(Provision_Fisiologicas: Provision_Fisiologicas) {
   try {
     // Validación de campos requeridos
-    if (!medida.ID_Trabajador || !medida.ID_NodoIoT || !medida.ID_Lugar || 
-        !medida.ID_Sensor || !medida.Fecha_Inicio || !medida.Fecha_Fin) {
+    if (!Provision_Fisiologicas.ID_Trabajador || !Provision_Fisiologicas.ID_NodoIoT || !Provision_Fisiologicas.ID_Lugar || 
+        !Provision_Fisiologicas.ID_Sensor || !Provision_Fisiologicas.Fecha_Inicio || !Provision_Fisiologicas.Fecha_Fin) {
       throw new Error("Todos los campos son requeridos");
     }
 
     // Crear el objeto de datos
-    const medidaData = {
-      ID_Trabajador: medida.ID_Trabajador,
-      ID_NodoIoT: medida.ID_NodoIoT,
-      ID_Lugar: medida.ID_Lugar,
-      ID_Sensor: medida.ID_Sensor,
-      Fecha_Inicio: medida.Fecha_Inicio,
-      Fecha_Fin: medida.Fecha_Fin
+    const Provision_FisiologicasData = {
+      ID_Trabajador: Provision_Fisiologicas.ID_Trabajador,
+      ID_NodoIoT: Provision_Fisiologicas.ID_NodoIoT,
+      ID_Lugar: Provision_Fisiologicas.ID_Lugar,
+      ID_Sensor: Provision_Fisiologicas.ID_Sensor,
+      Fecha_Inicio: Provision_Fisiologicas.Fecha_Inicio,
+      Fecha_Fin: Provision_Fisiologicas.Fecha_Fin
       
     };
 
-    console.log(medidaData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/register", {
+    console.log(Provision_FisiologicasData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(medidaData),
+      body: JSON.stringify(Provision_FisiologicasData),
     });
 
     if (!res.ok) {
@@ -771,37 +798,37 @@ export async function registrarMedida(medida: Medida) {
 
     return await res.json();
   } catch (error) {
-    console.error("Error en registrarMedida:", error);
+    console.error("Error en registrarProvision_Fisiologicas:", error);
     throw error;
   }
 }
 
-export async function actualizarMedida(medida: Medida) {
+export async function actualizarProvision_Fisiologicas(Provision_Fisiologicas: Provision_Fisiologicas) {
   try {
     // Validación de campos requeridos
-    if (!medida.ID_Medida) {
-      throw new Error("El ID de la Medida es requerido");
+    if (!Provision_Fisiologicas.ID_Provision_Fisiologicas) {
+      throw new Error("El ID de la Provision_Fisiologicas es requerido");
     }
 
     // Crear el objeto de datos
-    const medidaData = {
-      ID: medida.ID_Medida,
-      ...(medida.ID_Trabajador && { ID_Trabajador: medida.ID_Trabajador }),
-      ...(medida.ID_NodoIoT && { ID_NodoIoT: medida.ID_NodoIoT}),
-      ...(medida.ID_Lugar && { ID_Lugar: medida.ID_Lugar}),
-      ...(medida.ID_Sensor && { ID_Sensor: medida.ID_Sensor}),
-      ...(medida.Fecha_Inicio && { Fecha_Inicio: medida.Fecha_Inicio}),
-      ...(medida.Fecha_Fin && { Fecha_Fin: medida.Fecha_Fin})
+    const Provision_FisiologicasData = {
+      ID: Provision_Fisiologicas.ID_Provision_Fisiologicas,
+      ...(Provision_Fisiologicas.ID_Trabajador && { ID_Trabajador: Provision_Fisiologicas.ID_Trabajador }),
+      ...(Provision_Fisiologicas.ID_NodoIoT && { ID_NodoIoT: Provision_Fisiologicas.ID_NodoIoT}),
+      ...(Provision_Fisiologicas.ID_Lugar && { ID_Lugar: Provision_Fisiologicas.ID_Lugar}),
+      ...(Provision_Fisiologicas.ID_Sensor && { ID_Sensor: Provision_Fisiologicas.ID_Sensor}),
+      ...(Provision_Fisiologicas.Fecha_Inicio && { Fecha_Inicio: Provision_Fisiologicas.Fecha_Inicio}),
+      ...(Provision_Fisiologicas.Fecha_Fin && { Fecha_Fin: Provision_Fisiologicas.Fecha_Fin})
     };
 
-    console.log(medidaData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/update", {
+    console.log(Provision_FisiologicasData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(medidaData),
+      body: JSON.stringify(Provision_FisiologicasData),
     });
 
     if (!res.ok) {
@@ -810,31 +837,31 @@ export async function actualizarMedida(medida: Medida) {
 
     return await res.json();
   } catch (error) {
-    console.error("Error en actualizarMedida:", error);
+    console.error("Error en actualizarProvision_Fisiologicas:", error);
     throw error;
   }
 }
 
-export async function eliminarMedida(medida: Medida) {
+export async function eliminarProvision_Fisiologicas(Provision_Fisiologicas: Provision_Fisiologicas) {
   try {
     // Validación de campos requeridos
-    if (!medida.ID_Medida) {
-      throw new Error("El ID de la Medida es requerido");
+    if (!Provision_Fisiologicas.ID_Provision_Fisiologicas) {
+      throw new Error("El ID de la Provision_Fisiologicas es requerido");
     }
 
     // Crear el objeto de datos
-    const medidaData = {
-      ID: medida.ID_Medida
+    const Provision_FisiologicasData = {
+      ID: Provision_Fisiologicas.ID_Provision_Fisiologicas
     };
 
-    console.log(medidaData);
-    const res = await fetch("http://4.150.10.133:8090/api/v1/medida/remove", {
+    console.log(Provision_FisiologicasData);
+    const res = await fetch("http://4.150.10.133:8090/api/v1/Provision_Fisiologicas/remove", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(medidaData),
+      body: JSON.stringify(Provision_FisiologicasData),
     });
 
     if (!res.ok) {
@@ -843,7 +870,7 @@ export async function eliminarMedida(medida: Medida) {
 
     return await res.json();
   } catch (error) {
-    console.error("Error en eliminarMedida:", error);
+    console.error("Error en eliminarProvision_Fisiologicas:", error);
     throw error;
   }
 }

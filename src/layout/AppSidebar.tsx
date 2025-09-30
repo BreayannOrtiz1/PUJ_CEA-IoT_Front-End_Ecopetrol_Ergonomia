@@ -36,7 +36,7 @@ const navItems: NavItem[] = [
       { name: "Sensor", path: "/sensor", pro: false }, 
       { name: "Trabajador", path: "/trabajador", pro: false },
       { name: "Rango de Edad", path: "/rangoedad", pro: false },
-      { name: "Medida", path: "/medida", pro: false },
+      { name: "Provision-Fisiologicas", path: "/fisiologicas", pro: false },
     { name: "Elements", path: "/form-elements", pro: false }],
   },
   {

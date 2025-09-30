@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Modal } from "../../components/ui/modal";
-import Button from "../../components/ui/button/Button";
+import { Modal } from "../ui/modal";
+import Button from "../ui/button/Button";
 import TextArea from "../form/input/TextArea";
 import Label from "../form/Label";
 
@@ -16,12 +16,12 @@ interface OperationResult {
 /**
  * Props para el modal de eliminación
  */
-interface DeleteMedidaModalProps {
+interface DeleteProvision_FisiologicasModalProps {
     isOpen: boolean;                                        // Controla la visibilidad del modal
     onClose: () => void;                                   // Función para cerrar el modal
     onConfirm: (data: any) => Promise<OperationResult>;    // Callback para eliminar en la base de datos
-    medidaData?: {                                        // Datos dela mediad a eliminar (opcional)
-        ID_Medida?: string | number;
+    Provision_FisiologicasData?: {                                        // Datos dela mediad a eliminar (opcional)
+        ID_Provision_Fisiologicas?: string | number;
     };
 }
 
@@ -29,14 +29,14 @@ interface DeleteMedidaModalProps {
  * Modal de confirmación para eliminar 
  * Permite al usuario ingresar el ID a eliminar y muestra información adicional si está disponible.
  */
-export const DeleteMedidaModal = ({
+export const DeleteProvision_FisiologicasModal = ({
     isOpen,
     onClose,
     onConfirm,
-   medidaData
-}: DeleteMedidaModalProps) => {
+   Provision_FisiologicasData
+}: DeleteProvision_FisiologicasModalProps) => {
     // Estado para manejar el ID ingresado por el usuario
-    const [medidaId, setMedidaId] = useState(medidaData?.ID_Medida?.toString() || '');
+    const [Provision_FisiologicasId, setProvision_FisiologicasId] = useState(Provision_FisiologicasData?.ID_Provision_Fisiologicas?.toString() || '');
     // Estado para manejar el proceso de eliminación
     const [isLoading, setIsLoading] = useState(false);
     // Estado para manejar errores
@@ -54,7 +54,7 @@ export const DeleteMedidaModal = ({
      */
     const handleConfirm = async () => {
         // Validar que haya un ID válido
-        if (!validateId(medidaId)) {
+        if (!validateId(Provision_FisiologicasId)) {
             setError('Debe proporcionar un ID válido');
             return;
         }
@@ -65,7 +65,7 @@ export const DeleteMedidaModal = ({
         try {
             // Preparar datos para enviar al servidor
             const deleteData = {
-                ID_Medida: Number(medidaId),
+                ID_Provision_Fisiologicas: Number(Provision_FisiologicasId),
             };
 
             const result = await onConfirm(deleteData);
@@ -95,12 +95,12 @@ export const DeleteMedidaModal = ({
                 <div className="mb-6">
                     <div className="mb-4">
                         <Label>
-                            ID Medida <span className="text-red-500">*</span>
+                            ID Provision_Fisiologicas <span className="text-red-500">*</span>
                         </Label>
                         <TextArea
-                            value={medidaId}
+                            value={Provision_FisiologicasId}
                             onChange={(value) => {
-                                setMedidaId(value);
+                                setProvision_FisiologicasId(value);
                                 setError(null);
                             }}
                             rows={1}

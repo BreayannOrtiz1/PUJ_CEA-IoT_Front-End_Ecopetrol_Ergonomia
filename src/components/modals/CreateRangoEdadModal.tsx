@@ -5,7 +5,6 @@ import { ModalCreateInTable } from "../common/ModalCreateInTable";
  * Todos los campos son requeridos para la creación
  */
 const rangoEdadFields = [
-    { name: "RangoEdad", label: "ID Rango de Edad", required: true },
     { name: "Minimo", label: "Edad Minima", required: true },
     { name: "Maximo", label: "Edad Maxima", required: true }
     
@@ -75,8 +74,8 @@ export const CreateRangoEdadModal = ({
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Crear nuevo Nodo IoT"
-            description="Ingrese los datos del nuevo nodo IoT. Todos los campos son obligatorios."
+            title="Crear nuevo Rango de edad"
+            description="Ingrese los datos del rango de edad. Todos los campos son obligatorios."
             fields={rangoEdadFields}
             entityName="Rango_Edad"
         />

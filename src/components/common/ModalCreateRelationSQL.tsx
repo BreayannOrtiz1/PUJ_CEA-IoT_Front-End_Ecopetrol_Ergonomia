@@ -5,6 +5,7 @@ import Button from "../../components/ui/button/Button";
 import TextArea from "../form/input/TextArea";
 import Label from "../../components/form/Label";
 import { FormField, BaseFormData, ApiResponse, SelectOption } from '../../types/common';
+import { useCRUD } from "../../hooks/useCRUD"
 
 interface ModalCreateRelationSQLProps<T extends BaseFormData = BaseFormData> {
     isOpen: boolean;
@@ -14,6 +15,7 @@ interface ModalCreateRelationSQLProps<T extends BaseFormData = BaseFormData> {
     description?: string;
     fields: FormField[];           // Lista de campos a mostrar
     entityName: string;            // Nombre de la entidad (ej: "Gateway", "Sensor"), se utiliza para el texto de los inputs
+    loading?: boolean; // Nuevo: estado de carga externo (para cargar opciones)
 }
 
 export function ModalCreateRelationSQL<T extends BaseFormData>({
@@ -23,23 +25,31 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
     title = "Crear",
     description = "Ingrese los datos requeridos",
     fields,
-    entityName
+    entityName,
+    loading: externalLoading = false
 }: ModalCreateRelationSQLProps<T>) {
     // Estado para el formulario
     const [formData, setFormData] = useState<Record<string, string>>({});
-    const [loading, setLoading] = useState(false);
+    // Estado de carga interno (para el guardado)
+    const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
+
+
+
     // Inicializar formData con campos vacíos
     useEffect(() => {
-        setError(null);
-        const initialData: Record<string, string> = {};
-        fields.forEach(field => {
-            initialData[field.name] = '';
-        });
-        setFormData(initialData);
-    }, [fields]);
+        if (isOpen) {
+            setError(null);
+            setSuccess(null);
+            const initialData: Record<string, string> = {};
+            fields.forEach(field => {
+                initialData[field.name] = '';
+            });
+            setFormData(initialData);
+        }
+    }, [fields, isOpen]);
 
     // Manejar cambios en los campos
     const handleChange = (field: string, value: string) => {
@@ -50,7 +60,6 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
         // Limpiar mensajes de error/éxito al editar
         setError(null);
         setSuccess(null);
-        setLoading(false);
     };
 
     // Validar campos requeridos y formato de fecha
@@ -62,16 +71,16 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
                 setError(`El campo ${field.label} es obligatorio`);
                 return false;
             }
-            
+
             // Validación específica para campos de tipo fecha
             if (field.type === 'date') {
                 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-                
+
                 if (!dateRegex.test(value)) {
                     setError(`El campo ${field.label} debe tener el formato YYYY-MM-DD`);
                     return false;
                 }
-                
+
                 // Validar que la fecha sea válida
                 const date = new Date(value);
                 if (isNaN(date.getTime())) {
@@ -86,8 +95,8 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
     // Manejar el envío del formulario
     const handleSubmit = async () => {
         if (!validateForm()) return;
-        
-        setLoading(true);
+
+        setSaving(true);
         setError(null);
         setSuccess(null);
 
@@ -107,7 +116,7 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
             });
 
             const result = await onSave(processedData as T);
-            
+
             if (result.ok) {
                 setSuccess(result.message || `${entityName} creado exitosamente`);
                 // Limpiar formulario
@@ -116,7 +125,7 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
                     cleanData[field.name] = '';
                 });
                 setFormData(cleanData);
-                
+
                 // Cerrar modal después de un breve delay
                 setTimeout(() => {
                     closeModal();
@@ -128,10 +137,12 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
         } catch (err: any) {
             setError(err.message || `Error al crear ${entityName.toLowerCase()}`);
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
-
+    // Determinar si el botón de guardar debe estar deshabilitado
+    // Se deshabilita si está cargando opciones O si está guardando
+    const isDisabled = externalLoading || saving;
     return (
         <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
             <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
@@ -184,7 +195,7 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
                                 </div>
                             ))}
                         </div>
-                        
+
                         {/* Mensajes de error/éxito */}
                         {error && (
                             <div className="mt-4 p-3 rounded bg-red-100 text-red-700">
@@ -197,17 +208,21 @@ export function ModalCreateRelationSQL<T extends BaseFormData>({
                             </div>
                         )}
                     </div>
-                    
+
                     <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
                         <Button size="sm" variant="outline" onClick={closeModal} >
                             Cancelar
                         </Button>
-                        <Button 
-                            size="sm" 
+                        <Button
+                            size="sm"
                             onClick={handleSubmit}
-                            disabled={loading}
+                            disabled={isDisabled}
                         >
-                            {loading ? 'Guardando...' : 'Guardar'}
+                            {externalLoading
+                                ? 'Cargando opciones...'
+                                : saving
+                                    ? 'Guardando...'
+                                    : 'Guardar'}
                         </Button>
                     </div>
                 </form>

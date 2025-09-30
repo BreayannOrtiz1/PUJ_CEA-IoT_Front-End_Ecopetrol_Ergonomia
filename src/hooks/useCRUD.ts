@@ -5,13 +5,30 @@ import { registrarGateway, actualizarGateway, eliminarGateway, Gateway,
          registrarNodoIoT, actualizarNodoIoT, eliminarNodoIoT, NodoIoT,
          registrarSensor, actualizarSensor, eliminarSensor, Sensor,
          registrarTrabajador, actualizarTrabajador, eliminarTrabajador, Trabajador,
-         registrarMedida, actualizarMedida, eliminarMedida, Medida,
-         registrarRangoEdad, actualizarRangoEdad, eliminarRangoEdad, RangoEdad } from "../services/CRUDService";
+         registrarProvision_Fisiologicas, actualizarProvision_Fisiologicas, eliminarProvision_Fisiologicas, Provision_Fisiologicas,
+         registrarRangoEdad, actualizarRangoEdad, eliminarRangoEdad, RangoEdad,
+         getIDs, IDs} from "../services/CRUDService";
 
 export function useCRUD() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultado, setResultado] = useState<any>(null);
+
+  const get_ids = async (ids: IDs) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await getIDs(ids);
+      setResultado(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+    
+  }
 
   const registrar_rangoedad = async (rangoedad: RangoEdad) => {
     setLoading(true);
@@ -278,11 +295,11 @@ export function useCRUD() {
     }
   };
 
-  const registrar_medida = async (medida: Medida) => {
+  const registrar_Provision_Fisiologicas = async (Provision_Fisiologicas: Provision_Fisiologicas) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await registrarMedida(medida);
+      const res = await registrarProvision_Fisiologicas(Provision_Fisiologicas);
       setResultado(res);
       return res;
     } catch (err: any) {
@@ -293,11 +310,11 @@ export function useCRUD() {
     }
   };
 
-  const actualizar_medida = async (medida: Medida) => {
+  const actualizar_Provision_Fisiologicas = async (Provision_Fisiologicas: Provision_Fisiologicas) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await actualizarMedida(medida);
+      const res = await actualizarProvision_Fisiologicas(Provision_Fisiologicas);
       setResultado(res);
       return res;
     } catch (err: any) {
@@ -308,11 +325,11 @@ export function useCRUD() {
     }
   };
 
-  const eliminar_medida = async (medida: Medida) => {
+  const eliminar_Provision_Fisiologicas = async (Provision_Fisiologicas: Provision_Fisiologicas) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await eliminarMedida(medida);
+      const res = await eliminarProvision_Fisiologicas(Provision_Fisiologicas);
       setResultado(res);
       return res;
     } catch (err: any) {
@@ -330,7 +347,7 @@ export function useCRUD() {
     registrar_sensor, actualizar_sensor, eliminar_sensor,
     registrar_trabajador, actualizar_trabajador, eliminar_trabajador,
     registrar_rangoedad, actualizar_rangoedad, eliminar_rangoedad,
-    registrar_medida, actualizar_medida, eliminar_medida,
+    registrar_Provision_Fisiologicas, actualizar_Provision_Fisiologicas, eliminar_Provision_Fisiologicas, get_ids,
     loading, error, resultado 
   };
 }

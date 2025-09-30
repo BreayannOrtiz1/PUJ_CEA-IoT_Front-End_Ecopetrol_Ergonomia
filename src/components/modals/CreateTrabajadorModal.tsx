@@ -6,7 +6,7 @@ import { ModalCreateInTable } from "../common/ModalCreateInTable";
  */
 const TrabajadorFields = [
     { name: "Sexo", label: "Sexo", required: true },
-    { name: "Rango_Edad", label: "Rango de edad", required: true },
+    { name: "ID_Rango_Edad", label: "Rango de edad", required: true },
     { name: "Cargo", label: "Cargo", required: true },
 
 ];
@@ -72,8 +72,8 @@ export const CreateTrabajadorModal = ({
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Crear nuevo Nodo IoT"
-            description="Ingrese los datos del nuevo nodo IoT. Todos los campos son obligatorios."
+            title="Crear nuevo Trabajador"
+            description="Ingrese los datos del nuevo Trabajador. Todos los campos son obligatorios."
             fields={TrabajadorFields}
             entityName="Trabajador"
         />

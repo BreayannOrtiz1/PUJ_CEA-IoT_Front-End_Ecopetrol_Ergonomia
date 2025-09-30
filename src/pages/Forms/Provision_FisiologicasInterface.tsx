@@ -3,15 +3,15 @@ import { useCRUD } from "../../hooks/useCRUD";
 import { useModal } from "../../hooks/useModal";
 import PageMeta from "../../components/common/PageMeta";
 import { DynamicTable } from "../../components/tables/BasicTables/DynamicTable";
-import { CreateMedidaModal } from "../../components/modals/CreateMedidaModal";
-import { UpdateMedidaModal } from "../../components/modals/UpdateMedidaModal";
-import { DeleteMedidaModal } from "../../components/modals/DeleteMedidaModal";
+import { CreateProvision_FisiologicasModal } from "../../components/modals/CreateProvision_FisiologicasModal";
+import { UpdateProvision_FisiologicasModal } from "../../components/modals/UpdateProvision_FisiologicasModal";
+import { DeleteProvision_FisiologicasModal } from "../../components/modals/DeleteProvision_FisiologicasModal";
 
 /**
  * Interfaz principal para la gestión .
  * Permite crear, actualizar y eliminar en la base de datos.
  */
-export default function MedidaInterface() {
+export default function Provision_FisiologicasInterface() {
   // Estado para refrescar la tabla
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -22,9 +22,9 @@ export default function MedidaInterface() {
 
   // Hook para operaciones de nodoIoT
   const {
-    registrar_medida,
-    actualizar_medida,
-    eliminar_medida
+    registrar_Provision_Fisiologicas,
+    actualizar_Provision_Fisiologicas,
+    eliminar_Provision_Fisiologicas
   } = useCRUD();
 
   // Función para refrescar la tabla
@@ -35,8 +35,8 @@ export default function MedidaInterface() {
   /**
    * Interfaz para los datos
    */
-  interface Medida {
-    ID_Medida?: number;
+  interface Provision_Fisiologicas {
+    ID_Provision_Fisiologicas?: number;
     ID_Trabajador?: number;
     ID_NodoIoT?: number;
     ID_Lugar?: number;
@@ -49,17 +49,17 @@ export default function MedidaInterface() {
    */
   const handleCreate = async (formData: any) => {
     try {
-      const result = await registrar_medida(formData);
+      const result = await registrar_Provision_Fisiologicas(formData);
       handleRefresh(); // Actualizar la tabla después del éxito
       return {
         ok: true,
-        message: "Medida registrado exitosamente",
+        message: "Provision_Fisiologicas registrado exitosamente",
         data: result
       };
     } catch (error: any) {
       return {
         ok: false,
-        message: error.message || "Error al registrar el Medida",
+        message: error.message || "Error al registrar el Provision_Fisiologicas",
         data: null
       };
     }
@@ -71,17 +71,17 @@ export default function MedidaInterface() {
    */
   const handleUpdate = async (formData: any) => {
     try {
-      const result = await actualizar_medida(formData);
+      const result = await actualizar_Provision_Fisiologicas(formData);
       handleRefresh(); // Actualizar la tabla después del éxito
       return {
         ok: true,
-        message: "Medida actualizado exitosamente",
+        message: "Provision_Fisiologicas actualizado exitosamente",
         data: result
       };
     } catch (error: any) {
       return {
         ok: false,
-        message: error.message || "Error al actualizar el Medida",
+        message: error.message || "Error al actualizar el Provision_Fisiologicas",
         data: null
       };
     }
@@ -93,21 +93,21 @@ export default function MedidaInterface() {
    */
   const handleDelete = async (formData: any) => {
     try {
-      await eliminar_medida(formData);
+      await eliminar_Provision_Fisiologicas(formData);
       handleRefresh();
       return {
         ok: true,
-        message: "Medida eliminado exitosamente"
+        message: "Provision_Fisiologicas eliminado exitosamente"
       };
     } catch (error: any) {
       return {
         ok: false,
-        message: error.message || "Error al eliminar el Medida"
+        message: error.message || "Error al eliminar el Provision_Fisiologicas"
       };
     }
   };
 
-  const [selectedMedida] = useState<Medida | null>(null);
+  const [selectedProvision_Fisiologicas] = useState<Provision_Fisiologicas | null>(null);
 
   return (
     <div>
@@ -137,7 +137,7 @@ export default function MedidaInterface() {
                                     fill=""
                                 />
                             </svg>
-                            Crear una nueva Medida
+                            Crear una nueva Provision Fisiologicas
                         </button>
                         <button
                             onClick={openUpdateModal}
@@ -158,20 +158,20 @@ export default function MedidaInterface() {
                                     fill=""
                                 />
                             </svg>
-                            Editar una Medida
+                            Editar una Provision Fisiologicas
                         </button>
                         <button
                             onClick={openDeleteModal}
                             className="m-5 mt-1 flex w-1/2 items-center justify-center gap-2 rounded-full border border-solid border-blue-500 bg-white px-4 py-3 text-sm font-medium text-red-700 shadow-theme-xs hover:bg-red-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                         >
-                            Eliminar una Medida
+                            Eliminar una Provision Fisiologicas
                         </button>
 
                     </div>
                 </div>
                 <div className="flex justify-between items-center mb-5">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        MEDIDAS REGISTRADAS
+                        PROVISIONES FISIOLOGICAS REGISTRADAS
                     </h3>
                     <button
                         onClick={handleRefresh}
@@ -195,27 +195,27 @@ export default function MedidaInterface() {
                 </div>
 
         {/* Modal para crear  */}
-        <CreateMedidaModal
+        <CreateProvision_FisiologicasModal
           isOpen={isCreateOpen}
           onClose={closeCreateModal}
           onSave={handleCreate}
         />
 
         {/* Modal para actualizar  */}
-        <UpdateMedidaModal
+        <UpdateProvision_FisiologicasModal
           isOpen={isUpdateOpen}
           onClose={closeUpdateModal}
           onSave={handleUpdate}
-          initialData={selectedMedida}
+          initialData={selectedProvision_Fisiologicas}
         />
 
         {/* Modal para eliminar  */}
-        <DeleteMedidaModal
+        <DeleteProvision_FisiologicasModal
           isOpen={isDeleteOpen}
           onClose={closeDeleteModal}
           onConfirm={handleDelete}
-          medidaData={selectedMedida ? {
-            ID_Medida: selectedMedida.ID_Medida,
+          Provision_FisiologicasData={selectedProvision_Fisiologicas ? {
+            ID_Provision_Fisiologicas: selectedProvision_Fisiologicas.ID_Provision_Fisiologicas,
 
           } : undefined}
         />
@@ -223,9 +223,9 @@ export default function MedidaInterface() {
         {/* Tabla de dinamica */}
         <div className="space-y-1">
           <DynamicTable
-            tableName="Medida"
+            tableName="Config_Provision_Fisiologicas"
             key={refreshKey}
-            orderBy="ID_Medida"
+            orderBy="ID_Provision_Fisiologicas"
             orderDirection="asc"
           />
         </div>

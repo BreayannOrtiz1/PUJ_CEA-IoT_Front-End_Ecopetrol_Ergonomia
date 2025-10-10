@@ -1,7 +1,8 @@
+// src/types
 // Interfaz base para respuestas de la API
 export interface ApiResponse<T = unknown> {
     ok: boolean;
-    message: string;
+    message?: string;
     data?: T;
 }
 
@@ -80,20 +81,20 @@ export interface DeleteModalProps<T> extends BaseModalProps {
 
 // Interfaz para opciones de selección
 export interface SelectOption {
-    value: string;
-    label: string;
+    readonly value: string;
+    readonly label: string;
 }
 
 // Interfaz para campos de formulario
 export interface FormField {
-    name: string;
-    label: string;
-    required?: boolean;
-    type?: string;
-    rows?: number;
-    placeholder?: string;
-    options?: SelectOption[];
-    loadOptions?: () => Promise<SelectOption[]>;
+    readonly name: string;
+    readonly label: string;
+    readonly required?: boolean;
+    readonly type?: string;
+    readonly rows?: number;
+    readonly placeholder?: string;
+    readonly options?: SelectOption[];
+    readonly loadOptions?: () => Promise<SelectOption[]>;
 }
 
 // Tipo para ordenamiento

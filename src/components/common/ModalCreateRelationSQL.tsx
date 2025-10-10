@@ -5,7 +5,7 @@ import Button from "../../components/ui/button/Button";
 import TextArea from "../form/input/TextArea";
 import Label from "../../components/form/Label";
 import { FormField, BaseFormData, ApiResponse, SelectOption } from '../../types/common';
-import { useCRUD } from "../../hooks/useCRUD"
+import { useCRUD } from "../../hooks/useGenericCRUD"
 
 interface ModalCreateRelationSQLProps<T extends BaseFormData = BaseFormData> {
     isOpen: boolean;

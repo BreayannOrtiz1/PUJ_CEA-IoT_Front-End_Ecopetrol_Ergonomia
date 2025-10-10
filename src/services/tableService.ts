@@ -19,7 +19,7 @@ export async function listAll(tableName: string): Promise<ApiResponse<any>> {
     try {   //http://4.150.10.133:8090/api/v1/gateways
         //const tableNameJson = {tableName : tableName};
         //console.log(`Datos enviados a: ${API_BASE_URL}/${tableName}`);
-        const response = await fetch(`${API_BASE_URL}/gateway/?tableName=${tableName}`, {   // simpre se usa /gateway en el backend para listar cualquier tabla
+        const response = await fetch(`${API_BASE_URL}/generic/?tableName=${tableName}`, {   // simpre se usa /gateway en el backend para listar cualquier tabla
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

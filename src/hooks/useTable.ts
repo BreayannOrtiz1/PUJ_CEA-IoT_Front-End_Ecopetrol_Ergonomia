@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { listAll } from '../services/tableService';
+import { GenericCRUDService } from '../services/GenericCRUDService';
 
 interface UseTableResult {
     data: any[];           // Datos de la tabla
@@ -32,7 +32,7 @@ export function useTable(tableName: string): UseTableResult {
         setLoading(true);
         setError(null);
         try {
-            const response = await listAll(tableName);
+            const response = await GenericCRUDService.listAll(tableName);
             
             // Si la respuesta es exitosa
             if (response.ok) {

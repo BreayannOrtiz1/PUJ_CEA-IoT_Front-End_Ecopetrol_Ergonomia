@@ -76,6 +76,25 @@ export const entityConfig = {
     displayName: "Trabajadores",
     primaryKey: "ID_Trabajador"
   }, 
-} as const;
+  Config_Provision_Fisiologicas: {
+    fields: [
+      { name: "ID_NodoIoT", label: "ID del Nodo IoT", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_Sensor", label: "ID del sensor", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_Trabajador", label: "ID del trabajador ", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_Config_Provision_Gateways", label: "ID del gateway provisionado", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ECG", label: "¿Desea enviar datos de electrocardiograma? <br />Ingrese 1 para verdadero y 0 para falso", required: true},
+      { name: "HR_RR_RRi", label: "¿Desea enviar datos de frecuencia cardiaca, frecuencia respiratoria y tiempo entre latidos?<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "ACC", label: "¿Desea enviar datos relacionados con la acceleración o movimiento?<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "Activo", label: "Actualmente esta activo el sensor<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "SASTOKEN", label: "SASTOKEN. No olvide verificar la duración ", required: true }
+    ],
+    displayName: "Provisionamiento de sensor de variables fisiologicas",
+    primaryKey: "ID_Provision_Fisiologicas"
+  }
+} ;
 
 export type EntityType = keyof typeof entityConfig;

@@ -1,18 +1,11 @@
-import { ModalCreateInTable } from "../common/ModalCreateInTable";
+import { useState, useEffect } from "react";
+import { ModalCreateRelationSQL } from "../common/ModalCreateRelationSQL";
+import { SelectOption } from '../../types/common';
 
 /**
  * Campos para actualizar un
  * El ID es requerido, los demás campos son opcionales
  */
-const updateProvision_FisiologicasFields = [
-    { name: "ID_Provision_Fisiologicas", label: "ID Provision_Fisiologicas", required: true },
-    { name: "ID_Trabajador", label: "ID Trabajador", required: true },
-    { name: "ID_NodoIoT", label: "ID Nodo IoT", required: true },
-    { name: "ID_Lugar", label: "ID Lugar", required: true },
-    { name: "ID_Sensor", label: "ID Sensor", required: true },
-    { name: "Fecha_Inicio", label: "Fecha de Inicio", required: true, type: "date",  placeholder: "Formato: YYYY-MM-DD" },
-    { name: "Fecha_Fin", label: "Fecha Fin", required: true, type: "date",  placeholder: "Formato: YYYY-MM-DD" }
-];
 
 /**
  * Interfaz para el resultado de la operación
@@ -42,6 +35,205 @@ export const UpdateProvision_FisiologicasModal = ({
     onClose,
     onSave,
 }: UpdateProvision_FisiologicasModalProps) => {
+    // Estado para almacenar las opciones de cada select
+    const [selectOptions, setSelectOptions] = useState<{
+        trabajadores: SelectOption[];
+        nodos: SelectOption[];
+        sensores: SelectOption[];
+        gatewayprov: SelectOption[];
+    }>({
+        trabajadores: [],
+        nodos: [],
+        sensores: [],
+        gatewayprov: []
+    });
+
+    // Estado para controlar si se están cargando las opciones
+    const [loadingOptions, setLoadingOptions] = useState(false);
+
+    // Estado para manejar errores al cargar opciones
+    const [fetchError, setFetchError] = useState<string | null>(null);
+
+    /**
+     * Función que obtiene los IDs de todas las tablas relacionadas
+     * Usa el endpoint unificado /provision/listID
+     * Se ejecuta automáticamente cuando el modal se abre
+     */
+    const fetchTableIds = async () => {
+        // Activar estado de carga
+        setLoadingOptions(true);
+        setFetchError(null);
+
+        try {
+            // Definir configuración de las tablas a consultar
+            const tablesConfig = {
+                tables: [
+                    {
+                        name: "NodoIoT",
+                        idColumn: "ID_NodoIoT",
+                        displayColumn: "Referencia"
+                    },
+                    {
+                        name: "Sensor",
+                        idColumn: "ID_Sensor",
+                        displayColumn: "Modelo"
+                    },
+                    {
+                        name: "Trabajador",
+                        idColumn: "ID_Trabajador",
+                        displayColumn: "Cargo"
+                    },
+                    {
+                        name: "Config_Provision_Gateways",
+                        idColumn: "ID_Config_Provision_Gateways",
+                        displayColumn: "ID_Gateway"
+                    }
+                ]
+            };
+
+            // Hacer una sola petición al endpoint
+            const response = await fetch('http://4.150.10.133:8090/api/v1/provision/listID', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(tablesConfig)
+            });
+
+            // Validar respuesta
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.statusText}`);
+            }
+
+            // Obtener datos del servidor
+            const result = await response.json();
+
+            if (!result.ok) {
+                throw new Error(result.message || 'Error al obtener los IDs');
+            }
+
+            // result.data contiene un objeto con las tablas como keys
+            const data = result.data;
+
+            // Transformar los datos al formato {value, label} para los selects
+            const nodoOptions = data.NodoIoT?.map((item: any) => ({
+                value: item.id.toString(),
+                label: `${item.id} - ${item.display}`
+            })) || [];
+
+            const sensorOptions = data.Sensor?.map((item: any) => ({
+                value: item.id.toString(),
+                label: `${item.id} - ${item.display}`
+            })) || [];
+
+            const trabajadorOptions = data.Trabajador?.map((item: any) => ({
+                value: item.id.toString(),
+                label: `${item.id} - ${item.display}`
+            })) || [];
+
+            const gatewayProvisionOptions = data.Config_Provision_Gateways?.map((item: any) => ({
+                value: item.id.toString(),
+                label: `${item.id} - ${item.display}`
+            })) || [];
+
+            // Actualizar el estado con las opciones obtenidas
+            setSelectOptions({
+                nodos: nodoOptions,
+                sensores: sensorOptions,
+                trabajadores: trabajadorOptions,
+                gatewayprov: gatewayProvisionOptions
+            });
+
+        } catch (error: any) {
+            console.error('Error al obtener los IDs de las tablas:', error);
+            setFetchError('No se pudieron cargar las opciones. Intente nuevamente.');
+        } finally {
+            // Desactivar estado de carga siempre, incluso si hay error
+            setLoadingOptions(false);
+        }
+    };
+
+    /**
+     * useEffect que se ejecuta cada vez que cambia isOpen
+     * Cuando el modal se abre (isOpen = true), carga las opciones
+     */
+    useEffect(() => {
+        if (isOpen) {
+            // El modal acaba de abrirse, cargar las opciones
+            fetchTableIds();
+        }
+    }, [isOpen]);
+    
+    /**
+     * Definición dinámica de los campos del formulario
+     * Las opciones ahora vienen del estado selectOptions
+     */
+    const updateProvision_FisiologicasFields = [
+        { name: "ID_Provision_Fisiologicas", label: "ID Provision_Fisiologicas", required: true },
+        {
+            name: "ID_NodoIoT",
+            label: "Nodo IoT",
+            required: true,
+            type: 'select' as const,
+            options: loadingOptions
+                ? [{ value: "", label: "Cargando opciones..." }]
+                : selectOptions.nodos
+        },
+        {
+            name: "ID_Sensor",
+            label: "Sensor",
+            required: true,
+            type: 'select' as const,
+            options: loadingOptions
+                ? [{ value: "", label: "Cargando opciones..." }]
+                : selectOptions.sensores
+        },
+        {
+            name: "ID_Trabajador",
+            label: "Trabajador",
+            required: true,
+            type: 'select' as const,
+            options: loadingOptions
+                ? [{ value: "", label: "Cargando opciones..." }]
+                : selectOptions.trabajadores
+        },
+        {
+            name: "ID_Config_Provision_Gateways",
+            label: "ID Gateway Provisionado",
+            required: true,
+            type: 'select' as const,
+            options: loadingOptions
+                ? [{ value: "", label: "Cargando opciones..." }]
+                : selectOptions.gatewayprov
+        },
+        {
+            name: "ECG",
+            label: "¿Desea enviar datos de electrocardiograma? <br />Ingrese 1 para verdadero y 0 para falso",
+            required: true
+        },
+        {
+            name: "HR_RR_RRi",
+            label: "¿Desea enviar datos de frecuencia cardiaca, respiratoria y tiempo entre latidos?<br />Ingrese 1 para verdadero y 0 para falso",
+            required: true
+        },
+        {
+            name: "ACC",
+            label: "¿Desea enviar datos relacionados con la acceleración o movimiento?<br />Ingrese 1 para verdadero y 0 para falso",
+            required: true
+        },
+        {
+            name: "Activo",
+            label: "Actualmente esta activo el sensor<br />Ingrese 1 para verdadero y 0 para falso",
+            required: true
+        },
+        {
+            name: "SASTOKEN",
+            label: "SASTOKEN. No olvide verificar la duración ",
+            required: true
+        }
+    ];
+
     /**
      * Función para validar y enviar los datos de actualización
      */
@@ -82,14 +274,21 @@ export const UpdateProvision_FisiologicasModal = ({
     };
 
     return (
-        <ModalCreateInTable
+        <ModalCreateRelationSQL
             isOpen={isOpen}
             closeModal={onClose}
             onSave={handleSave}
-            title="Actualizar Provision_Fisiologicas"
-            description="Ingrese el ID de la Provision_Fisiologicas y los campos que desea actualizar"
+            title="Actualizar Provision Fisiologicas"
+            description={
+                fetchError
+                    ? fetchError
+                    : loadingOptions
+                        ? "Cargando opciones..."
+                        : "Ingrese el ID de la Provision Fisiologicas y los campos que desea actualizar"
+            }
             fields={updateProvision_FisiologicasFields}
-            entityName="Provision_Fisiologicas"
+            entityName="Provision Fisiologicas"
+            loading={loadingOptions}
         />
     );
 };

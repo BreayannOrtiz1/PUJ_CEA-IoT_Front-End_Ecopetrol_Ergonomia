@@ -11,7 +11,11 @@ export class GenericCRUDService {
   // Operación genérica CREATE
   static async create<T>(entity: string, data: T): Promise<ApiResponse> {
     try {
-      //console.log(JSON.stringify(data));
+      if(entity === "Config_Provision_Fisiologicas") {
+        entity = "provision";
+      }
+
+      console.log(JSON.stringify(data));
       const res = await fetch(`${API_BASE_URL}/${entity.toLowerCase()}/register`, {
         method: 'POST',
         headers: {
@@ -35,6 +39,9 @@ export class GenericCRUDService {
   // Operación genérica UPDATE
   static async update<T>(entity: string, data: T & { ID: number }): Promise<ApiResponse> {
     try {
+      if(entity === "Config_Provision_Fisiologicas") {
+        entity = "provision";
+      }
       console.log(JSON.stringify(data));
       const res = await fetch(`${API_BASE_URL}/${entity.toLowerCase()}/update`, {
         method: 'PUT',
@@ -59,6 +66,9 @@ export class GenericCRUDService {
   // Operación genérica DELETE
   static async delete(entity: string, id: number): Promise<ApiResponse> {
     try {
+      if(entity === "Config_Provision_Fisiologicas") {
+        entity = "provision";
+      }
       //console.log(JSON.stringify({ID: id}));
       const res = await fetch(`${API_BASE_URL}/${entity.toLowerCase()}/remove`, {
         method: 'DELETE',

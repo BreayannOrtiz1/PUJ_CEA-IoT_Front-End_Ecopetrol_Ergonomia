@@ -1,17 +1,19 @@
-import { useState } from "react";
-//import { useCRUD } from "../../hooks/useGenericCRUD";
-import { useModal } from "../../hooks/useModal";
-import PageMeta from "../../components/common/PageMeta";
-import { DynamicTable } from "../../components/tables/BasicTables/DynamicTable";
-import { CreateProvision_FisiologicasModal } from "../../components/modals/CreateProvision_FisiologicasModal";
-import { UpdateProvision_FisiologicasModal } from "../../components/modals/UpdateProvision_FisiologicasModal";
-import { DeleteProvision_FisiologicasModal } from "../../components/modals/DeleteProvision_FisiologicasModal";
+
+import GenericConfigEntityInterface from "../../components/GenericConfigEntityInterface";
 
 /**
  * Interfaz principal para la gestión .
  * Permite crear, actualizar y eliminar en la base de datos.
  */
 export default function Provision_FisiologicasInterface() {
+  return (
+    <GenericConfigEntityInterface
+      entity="Config_Provision_Fisiologicas"
+      title="Base de datos Gateways"
+      description="En esta página podrá agregar Gateways, editar o eliminarlos"
+    />
+  );
+  
   // // Estado para refrescar la tabla
   // const [refreshKey, setRefreshKey] = useState(0);
 

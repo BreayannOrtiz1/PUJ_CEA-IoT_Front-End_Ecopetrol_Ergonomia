@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import LugarInterface from "./pages/Forms/LugarInterface";
 import SensorInterface from "./pages/Forms/SensorInterface";
 import NodoInterface from "./pages/Forms/NodoIoTInterface";
-//import Provision_FisiologicasInterface from "./pages/Forms/Provision_FisiologicasInterface";
+import Provision_FisiologicasInterface from "./pages/Forms/Provision_FisiologicasInterface";
 import TrabajadorInterface from "./pages/Forms/TrabajadorInterface";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
@@ -40,18 +40,19 @@ export default function App() {
             <Route index path="/defaultDB" element={<Home />} />
 
            
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
+            {/* Registro */}
+            
             <Route path="/gateway" element={<GatewayInterface />} />
             <Route path="/lugar" element={<LugarInterface />} />
-            <Route path="/edad" element={<RangoEdadInterface />} />
-            <Route path="/sensor" element={<SensorInterface />} />
             <Route path="/nodo" element={<NodoInterface />} />
-            {/* <Route path="/fisiologicas" element={<Provision_FisiologicasInterface />} /> */}
+            <Route path="/sensor" element={<SensorInterface />} />
             <Route path="/trabajador" element={<TrabajadorInterface />} />
             <Route path="/rangoedad" element={<RangoEdadInterface />} />
+            <Route path="/form-elements" element={<FormElements />} />
+
+            <Route path="/fisiologicas" element={<Provision_FisiologicasInterface />} />
             
-             {/* Others Page */}
+            {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} />

@@ -85,16 +85,22 @@ export interface SelectOption {
     readonly label: string;
 }
 
+export interface SelectOptionsResponse {
+  NodoIoT: Array<{ id: string; display: string }>;
+  Sensor: Array<{ id: string; display: string }>;
+  Trabajador: Array<{ id: string; display: string }>;
+  Config_Provision_Gateways: Array<{ id: string; display: string }>;
+}
 // Interfaz para campos de formulario
 export interface FormField {
-    readonly name: string;
-    readonly label: string;
-    readonly required?: boolean;
-    readonly type?: string;
-    readonly rows?: number;
-    readonly placeholder?: string;
-    readonly options?: SelectOption[];
-    readonly loadOptions?: () => Promise<SelectOption[]>;
+    name: string;
+    label: string;
+    required?: boolean;
+    type?: string;
+    rows?: number;
+    placeholder?: string;
+    options?:  SelectOption[];
+    loadOptions?: () => Promise<SelectOption[]>;
 }
 
 // Tipo para ordenamiento

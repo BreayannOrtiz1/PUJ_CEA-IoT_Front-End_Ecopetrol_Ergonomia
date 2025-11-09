@@ -44,6 +44,8 @@ const navItems: NavItem[] = [
     icon: <PlugInIcon />,
     subItems: [
       { name: "Variables fisiológicas", path: "/fisiologicas", pro: false },
+      { name: "Variables ambientales", path: "/ambientales", pro: false },
+      { name: "Gateways", path: "/gateways", pro: false },
     ]
 
   },

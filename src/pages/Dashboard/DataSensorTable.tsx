@@ -49,7 +49,7 @@ export default function DataSensorTable() {
                 {/* Tabla de gateways */}
                 <div className="space-y-1">
                     <DynamicTable
-                        tableName="ECOPETROL_Main_Telemetry"
+                        tableName="Telemetria_HR_RR_RRi"
                         key={refreshKey}
                         orderBy="TimeStamp_Sensor"
                         orderDirection="desc"

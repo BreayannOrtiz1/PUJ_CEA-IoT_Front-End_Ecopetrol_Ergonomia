@@ -17,7 +17,11 @@ import FormElements from "./pages/Forms/FormElements";
 import LugarInterface from "./pages/Forms/LugarInterface";
 import SensorInterface from "./pages/Forms/SensorInterface";
 import NodoInterface from "./pages/Forms/NodoIoTInterface";
+
 import Provision_FisiologicasInterface from "./pages/Forms/Provision_FisiologicasInterface";
+import Provision_AmbientalesInterface from "./pages/Forms/Provision_AmbientalesInterface";
+import Provision_GatewaysInterface from "./pages/Forms/Porvision_GatewaysInterface";
+
 import TrabajadorInterface from "./pages/Forms/TrabajadorInterface";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
@@ -51,6 +55,8 @@ export default function App() {
             <Route path="/form-elements" element={<FormElements />} />
 
             <Route path="/fisiologicas" element={<Provision_FisiologicasInterface />} />
+            <Route path="/ambientales" element={<Provision_AmbientalesInterface />} />
+            <Route path="/gateways" element={<Provision_GatewaysInterface />} />
             
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />

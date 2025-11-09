@@ -94,6 +94,35 @@ export const entityConfig = {
     ],
     displayName: "Provisionamiento de sensor de variables fisiologicas",
     primaryKey: "ID_Provision_Fisiologicas"
+  },
+  Config_Provision_Ambiental: {
+    fields: [
+      { name: "ID_NodoIoT", label: "ID del Nodo IoT", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_Sensor", label: "ID del sensor", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_LugarNodo", label: "ID del lugar donde se encuentra el nodo", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "Temperatura", label: "¿Desea enviar datos de temperatura? <br />Ingrese 1 para verdadero y 0 para falso", required: true},
+      { name: "Humedad", label: "¿Desea enviar datos de humedad relativa<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "Activo", label: "Actualmente esta activo el sensor<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "SASTOKEN", label: "SASTOKEN. No olvide verificar la duración ", required: true },
+      { name: "Frecuencia de envio", label: "Ingrese la frecuencia de envio en segundos", required: true }
+    ],
+    displayName: "Provisionamiento de sensor de variables ambientales",
+    primaryKey: "ID_Provision_Ambiental"
+  },
+  Config_Provision_Gateways: {
+    fields: [
+      { name: "ID_Gateway", label: "ID del Nodo IoT", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "ID_Lugar", label: "ID del lugar donde se encuentra el gateway", required: true, type: 'select' as const,
+      options: [{ value: "", label: "Cargando opciones..." }] },
+      { name: "Instalado", label: "¿Actualmente esta instalado el gateway?<br />Ingrese 1 para verdadero y 0 para falso", required: true },
+      { name: "IP_Gateway", label: "Dirección IP ", required: true }
+    ],
+    displayName: "Provisionamiento de Gateways",
+    primaryKey: "ID_Config_Provision_Gateways"
   }
 } ;
 

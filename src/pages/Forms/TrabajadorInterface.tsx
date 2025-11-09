@@ -1,6 +1,5 @@
 
 import GenericEntityInterface from "../../components/GenericEntityInterface";
-import { DynamicTable } from "../../components/tables/BasicTables/DynamicTable";
 
 export default function TrabajadorInterface() {
   return (
